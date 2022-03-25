@@ -1,0 +1,90 @@
+@namespace GitTimelapseView
+
+@if (_commit == null)
+{
+    <Card class="commit-details">
+    </Card>
+}
+else
+{
+    <Card Size="small" class="commit-details" Style="height: 100%">
+	    <TitleTemplate>
+		    <div class="card-title" style="font-weight: bolder;">
+			    <span title=@_commit.Id>
+				    Commit #@_commit.ShortId
+			    </span>
+                <Tooltip Title=@CopyToClipboardTooltip>
+                    <Button Type="@ButtonType.Text" @onclick="OnButtonClicked" Size="@ButtonSize.Small">
+                        <i class="mdi mdi-clipboard-multiple-outline"></i>
+                    </Button>
+                </Tooltip>
+                <span style="font-size: 12px;">by</span>
+                <span>
+			        <AvatarExt Email=@_commit.Author.Email ShowDisplayName />
+                </span>
+			    <span style="font-size: 12px;">on @_authoredString</span>
+		    </div>
+	    </TitleTemplate>
+        <Extra>
+            @if(!string.IsNullOrEmpty(_commit.ContainedInTag))
+                {
+                    <Tooltip Title=@($"contained in tag {_commit.ContainedInTag}")>
+                        <span style="opacity:0.4; margin-left: 20px; font-size: 12px;">
+                            <i class="mdi mdi-tag" ></i>
+                            @_commit.ContainedInTag
+                        </span>
+                    </Tooltip>
+                }
+        </Extra>
+        <CardTabs>
+	        <Tabs @bind-ActiveKey="@_selectedTab" Animated Size="@TabSize.Small" >
+			    <TabPane Tab="Message" Key="message">
+                    <div style="margin:10px; overflow: scroll; max-height: 220px; max-width: 750px; overflow-y: scroll; overflow-x: scroll;white-space: pre-wrap;">
+				        @_commit.Message
+                    </div>
+			    </TabPane >
+			    <TabPane Tab="Changes" Key="changes">
+					<FileChanges Changes="@_commit.FileChanges" CommitId="@_commit.Id"></FileChanges>
+			    </TabPane >
+		    </Tabs>
+        </CardTabs>
+    </Card>
+}
+
+@code {
+
+    [Inject]
+    TimelapseService TimelapseService { get; set; } = default!;
+
+    [Inject]
+    MessageService MessageService { get; set; } = default!;
+
+    private Commit? _commit;
+    string _selectedTab = "message";
+    private string _authoredString => _commit?.Author.When.ToString("dd/MM/yyyy @ hh:mm") ?? string.Empty;
+    private const string CopyToClipboardTooltip = "Copy complete id to clipboard";
+
+    protected override async Task OnInitializedAsync()
+    {
+        TimelapseService.CurrentCommitChanged += async (e, args) => await UpdateAsync().ConfigureAwait(false);
+        await UpdateAsync().ConfigureAwait(false);
+        await base.OnInitializedAsync();
+    }
+
+    private async Task UpdateAsync()
+    {
+        if (TimelapseService.FileHistory != null && TimelapseService.CurrentCommit != null)
+        {
+            _commit = TimelapseService.CurrentCommit;
+        }
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    private async Task OnButtonClicked()
+    {
+        if (TimelapseService.CurrentCommit != null)
+        {
+            await new CopyToClipboardAction(TimelapseService.CurrentCommit.Id, "commit id").ExecuteAsync().ConfigureAwait(false);
+        }
+	}
+}

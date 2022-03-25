@@ -1,0 +1,7 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <files>
+    <file src="..\publish\**" target="tools" />
+    <file src="GitTimelapseView.facade.xml" target="tools" />
+  </files>
+</package>

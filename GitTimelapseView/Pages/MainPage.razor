@@ -1,0 +1,85 @@
+﻿@page "/"
+@using System.Timers
+
+@if (_actionContext != null && _actionContext.State == ActionState.Failed && _actionContext.ErrorFeedback == VisualFeedback.FullScreen)
+{
+    <ErrorPage Context="@_actionContext"></ErrorPage>
+}
+else if (_actionContext != null && _actionContext.State == ActionState.Running && _actionContext.ProgressFeedback == VisualFeedback.FullScreen)
+{
+	<LoadingPage Text="@_actionContext.ProgressMessage"></LoadingPage>
+}
+else if (TimelapseService.FileHistory == null)
+{
+	<GettingStartedPage />
+}
+else
+{
+	<div class="main-grid">
+		<div class="slider-box">
+		    <HistorySlider />
+		</div>
+
+		<div class="text-editor-box">
+			<TextEditor />
+		</div>
+
+        <div class="revision-list-box">
+			<RevisionList />
+		</div>
+
+		<div class="commit-info-box">
+			<CommitInfo />
+		</div>
+	</div>
+}
+
+@code {
+    [Inject]
+    TimelapseService TimelapseService { get; set; } = default!;
+
+    [Inject]
+    ActionService ActionService { get; set; } = default!;
+
+    [Inject]
+    MessagingService MessagingService { get; set; } = default!;
+
+    [Inject]
+    MessageService MessageService { get; set; } = default!;
+
+    IActionContext? _actionContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ActionService.ActionStarted += (e, args) => OnActionStarted(args);
+        ActionService.ActionCompleted += (e, args) => OnActionCompleted(args);
+        MessagingService.MessageService = MessageService;
+        if (ActionService.CurrentAction != null)
+		{
+			OnActionStarted(ActionService.CurrentAction);
+		}
+		await base.OnInitializedAsync();
+    }
+
+	private void OnActionStarted(IActionContext actionContext)
+	{
+		_actionContext = actionContext;
+		((BindableBase)actionContext).ObservePropertyChanged(nameof(IActionContext.ProgressFeedback), (e, args) => UpdateProgressFeedback());
+		UpdateProgressFeedback();
+	}
+
+	private void OnActionCompleted(IActionContext actionContext)
+	{
+		UpdateProgressFeedback();
+	}
+
+	void UpdateProgressFeedback()
+	{
+		RefreshAsync().ConfigureAwait(false);
+	}
+
+	private async Task RefreshAsync()
+	{
+		await InvokeAsync(() => StateHasChanged());
+	}
+}

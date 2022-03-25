@@ -1,0 +1,81 @@
+﻿@namespace GitTimelapseView
+@using LibGit2Sharp
+
+<Table
+    TItem="FileChangeTableRow"
+    DataSource="@Rows"
+    Size=@TableSize.Small
+    ScrollY=@_scrollY
+    PageSize=@PageSize
+    RowClassName="@(x => x.Data.RowClass)"
+    HidePagination=@_hidePagination>
+    <Column @bind-Field="@context.ChangeKind" Width="70" Title="Change" Align="ColumnAlign.Center">
+        @if(@context.ChangeKind == ChangeKind.Modified)
+		{
+			<i class="mdi mdi-pencil-box change-icon" style="color: #C48C45;" title="Modified"></i>
+		}else if(@context.ChangeKind == ChangeKind.Added)
+		{
+			<i class="mdi mdi-plus-box change-icon" style="color: #55A65B;" title="Added"></i>
+		}else if(@context.ChangeKind == ChangeKind.Deleted)
+		{
+			<i class="mdi mdi-minus-box change-icon" style="color: #9C3C43;" title="Deleted"></i>
+		}else if(@context.ChangeKind == ChangeKind.Renamed)
+		{
+			<i class="mdi mdi-alpha-r-box change-icon" style="color: #37599D;" title="Renamed"></i>
+		}else if(@context.ChangeKind == ChangeKind.Conflicted)
+		{
+			<i class="mdi mdi-alpha-c-box change-icon" style="color: red;" title="Conflict"></i>
+		}
+    </Column>
+    <Column @bind-Field="@context.Path" Title="Path" Width="520" Ellipsis Sortable Filterable />
+    <ActionColumn Width="60">
+        <div class="actions">
+            <Tooltip Title="@DiffTooltip">
+                <Button Type="@ButtonType.Link" OnClick="()=>OnRowClicked(context)" Size="@ButtonSize.Small" >Diff</Button>
+            </Tooltip>
+        </div>
+    </ActionColumn>
+</Table>
+
+<style>
+    .filechange {
+        font-size: 12px;
+    }
+</style>
+
+@code {
+    private const string DiffTooltip = "View diff using default diff tool";
+    private FileChangeTableRow[] Rows => Changes.Select(x => new FileChangeTableRow(x)).ToArray();
+    private const int PageSize = 100;
+    private bool _hidePagination => Changes.Count < PageSize;
+    private string _scrollY => _hidePagination ? "220px" : "160px";
+
+    [Parameter]
+    public string CommitId { get; set; } = default!;
+
+    [Parameter]
+    public IReadOnlyList<FileChange> Changes { get; set; } = default!;
+
+    public void OnRowClicked(FileChangeTableRow fileChangeRow)
+    {
+        new DiffFileChangeAction(fileChangeRow.FileChange, CommitId).ExecuteAsync().ConfigureAwait(false);
+    }
+
+    public class FileChangeTableRow
+    {
+        public FileChangeTableRow(FileChange fileChange)
+        {
+            ChangeKind = fileChange.ChangeKind;
+            Path = fileChange.Path;
+            FileChange = fileChange;
+        }
+
+        public ChangeKind ChangeKind { get; set; }
+
+        public string Path { get; set; }
+
+        public FileChange FileChange { get; }
+
+        public string RowClass => "filechange";
+    }
+}

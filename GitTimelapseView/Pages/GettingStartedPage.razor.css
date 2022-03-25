@@ -1,0 +1,32 @@
+.getting-started-component {
+    background: var(--gtlv-card-header-background);
+    margin-top: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 7px;
+    padding: 50px 20px 120px 20px;
+    color: var(--gtlv-foreground);
+}
+
+.title {
+    font-size: 54px;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-top: 30px;
+    margin-bottom: .1em;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.separator {
+    border-bottom: 1px solid #999999;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.mdi {
+    margin-right: 10px;
+}

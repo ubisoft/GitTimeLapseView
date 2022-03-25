@@ -1,0 +1,39 @@
+﻿@namespace GitTimelapseView
+
+<Popover Style="display: inline;" Title=@Title Placement=@Placement >
+    <ContentTemplate>
+        <div style="max-width: 400px;">
+            @if (Revision != null)
+			{
+                <span><i class="mdi mdi-message-text-outline"></i>@Revision.Commit.MessageShort</span><br/>
+                <span style="opacity: 0.5"><i class="mdi mdi-account-outline"></i>@Revision.Commit.Author.Name</span><br/>
+                <span style="opacity: 0.5"><i class="mdi mdi-calendar"></i>@Revision.Commit.Author.When</span><br/>
+                <span style="opacity: 0.5"><i class="mdi mdi-source-commit"></i>@Revision.Commit.ShortId</span><br/>
+			}
+        </div>
+    </ContentTemplate>
+    <ChildContent>
+        @ChildContent
+    </ChildContent>
+</Popover>
+
+@code {
+    [Inject]
+    public TimelapseService? TimelapseService { get; set; } = default!;
+
+    [Parameter]
+    public FileRevision Revision { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public Placement Placement { get; set; } = Placement.Top;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+    }
+
+    private string Title => $"Revision {Revision.Label}";
+}

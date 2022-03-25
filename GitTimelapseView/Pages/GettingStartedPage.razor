@@ -1,0 +1,17 @@
+﻿@namespace GitTimelapseView
+
+<div class="getting-started-component">
+    <h1 class="title"><i class="mdi mdi-information"></i>Getting Started</h1>
+    <h2 class="subtitle">
+       Click on <Button Type="@ButtonType.Primary" OnClick="OnOpenClicked">OPEN</Button> to view history of any file from a git repository
+    </h2>
+    <div class="separator" />
+</div>
+
+
+@code {
+	private void OnOpenClicked()
+	{
+		new OpenFileAction().ExecuteAsync().ConfigureAwait(false);
+	}
+}

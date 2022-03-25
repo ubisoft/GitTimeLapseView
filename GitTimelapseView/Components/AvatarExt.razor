@@ -1,0 +1,39 @@
+﻿@namespace GitTimelapseView
+
+@if(_userInfo != null)
+{
+   <UserTooltip UserInfo=@_userInfo Placement=@PopupPlacement>
+        @if (ShowDisplayName)
+        {
+            <span style="font-size: 12px; margin-right: 4px;">
+			    @_userInfo.DisplayName
+            </span>
+        }
+        @if (_userInfo != null)
+        {
+            <img src="@_userInfo.ProfilePictureUrl" style="vertical-align: middle; width: 18px; height: 18px; border-radius: 50%"/>
+        }
+    </UserTooltip> 
+}
+
+@code {
+    [Inject]
+    UserInfoService UserInfoService { get; set; } = default!;
+
+    [Parameter]
+    public string Email { get; set; } = default!;
+
+    [Parameter]
+    public Placement PopupPlacement { get; set; } = Placement.Top;
+
+    [Parameter]
+    public bool ShowDisplayName { get; set; } = false;
+
+    private UserInfo? _userInfo;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _userInfo = await UserInfoService.GetUserInfoAsync(Email).ConfigureAwait(false);
+        await base.OnParametersSetAsync();
+	}
+}

@@ -1,0 +1,80 @@
+.ant-card-bordered {
+    border-color: var(--gtlv-card-border);
+}
+
+.ant-card-body {
+    padding: 0px;
+    overflow: scroll;
+}
+
+.ant-card-head {
+    background: var(--gtlv-card-header-background);
+}
+
+.ant-table-small .ant-table-thead > tr > th {
+    background: transparent;
+}
+
+.ant-table.ant-table-small .ant-table-footer, .ant-table.ant-table-small .ant-table-tbody > tr > td, .ant-table.ant-table-small .ant-table-thead > tr > th, .ant-table.ant-table-small .ant-table-title, .ant-table.ant-table-small tfoot > tr > td, .ant-table.ant-table-small tfoot > tr > th {
+    padding: 4px;
+}
+
+.ant-layout-sider {
+    background: transparent;
+    min-width:0px;
+    width: auto;
+}
+
+.ant-tabs-large > .ant-tabs-nav .ant-tabs-tab {
+    padding: 8px 0px;
+}
+
+#root-container {
+    background: var(--gtlv-background);
+    color: var(--gtlv-foreground);
+}
+
+::-webkit-scrollbar {
+    width: 16px;
+    height: 0px;
+}
+
+::-webkit-scrollbar-button {
+    visibility: collapse;
+    height: 0px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-track-piece {
+    background-color: var(--gtlv-scrollbar-background);
+}
+
+::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: var(--gtlv-scrollbar-thumb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--gtlv-scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+    visibility: collapse;
+    height: 0px;
+}
+
+::-webkit-resizer {
+    visibility: collapse;
+    height: 0px;
+}
+
+.far {
+    color: var(--gtlv-foreground);
+}
+
+.tooltip-inner {
+    text-align:left;
+}

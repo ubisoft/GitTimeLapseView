@@ -1,0 +1,37 @@
+﻿@inherits LayoutComponentBase
+@namespace GitTimelapseView
+
+<ThemeProvider />
+
+<div id="root-container" style='height:100vh; overflow: hidden;' @onmousedown="OnMouseDown" @onmousewheel="OnMouseWheel" @onkeydown="OnKeyDown">
+    <PageProgress></PageProgress>
+	@Body
+</div>
+
+@code{
+	[Inject]
+	TelemetryService TelemetryService { get; set; } = default!;
+
+    private void OnMouseDown()
+    {
+        NotifySessionTrackerUserInput();
+    }
+
+    private void OnMouseWheel()
+    {
+        NotifySessionTrackerUserInput();
+    }
+
+    private void OnKeyDown()
+    {
+        NotifySessionTrackerUserInput();
+    }
+
+    private void NotifySessionTrackerUserInput()
+    {
+        if (TelemetryService != null)
+        {
+            TelemetryService.NotifyUserActivity();
+        }
+    }
+}

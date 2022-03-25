@@ -1,0 +1,20 @@
+﻿@namespace GitTimelapseView
+
+@if (PageProgressService?.IsProgressVisible == true)
+{
+    <div class="progress-line"></div>
+}
+
+@code {
+    [Inject]
+    private PageProgressService PageProgressService { get; set; } = default!;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (PageProgressService != null)
+        {
+            PageProgressService.PropertyChanged += (e, args) => InvokeAsync(StateHasChanged);
+        }
+    }
+}

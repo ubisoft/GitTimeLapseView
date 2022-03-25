@@ -1,0 +1,21 @@
+:root {
+    --gtlv-background: #FFFFFF;
+    --gtlv-foreground: #000;
+    --gtlv-card-background: #FFFFFF;
+    --gtlv-card-header-background: #F7F7F7;
+    --gtlv-card-border: #E0E0E0;
+    --gtlv-scrollbar-background: #F8F9FA;
+    --gtlv-scrollbar-thumb: #C1C1C0;
+    --gtlv-scrollbar-thumb-hover: #929292;
+    --gtlv-table-background: #FFFFFF;
+    --gtlv-table-hover: #ECECEC;
+    --gtlv-tab-background: #FFFFFF;
+    --gtlv-tab-foreground: #495057;
+    --gtlv-tab-border: #DEE2E6;
+    --gtlv-jumbotron-background: #F7F7F7;
+    --gtlv-editor-highlight: rgba(255, 165, 0, 0.15);
+    --gtlv-editor-margin: lightblue;
+    --gtlv-editor-margin-alt: #9084AE;
+    --gtlv-page-progress-rail: #F5F5F5;
+    --gtlv-page-progress-track: #16436E;
+}
