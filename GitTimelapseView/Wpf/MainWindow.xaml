@@ -1,0 +1,91 @@
+<Window x:Class="GitTimelapseView.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Name="_mainWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        WindowStyle="None"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        MaxHeight="{DynamicResource {x:Static SystemParameters.MaximizedPrimaryScreenHeightKey}}"
+        MaxWidth="{DynamicResource {x:Static SystemParameters.MaximizedPrimaryScreenWidthKey}}"
+        Title="GitTimelapseView" Height="1050" Width="1500" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+
+        <Style x:Key="TitleBarMenuItemStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MaterialDesignMenuItem}">
+            <Setter Property="FontWeight" Value="Light"></Setter>
+            <Setter Property="Cursor" Value="Arrow"></Setter>
+            <Setter Property="Margin" Value="0"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+            <Setter Property="Background" Value="Transparent"></Setter>
+            <Setter Property="BorderBrush" Value="Transparent"></Setter>
+            <Setter Property="materialDesign:RippleAssist.IsDisabled" Value="True"></Setter>
+        </Style>
+
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+            <Setter Property="Foreground" Value="#999" ></Setter>
+            <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+            <Setter Property="Padding" Value="10 0" ></Setter>
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#222"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome x:Name="WindowChrome" CaptionHeight="{Binding ActualHeight,ElementName=titlebar}" ResizeBorderThickness="8" GlassFrameThickness="4 27 4 4"/>
+    </WindowChrome.WindowChrome>
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed"/>
+        <CommandBinding Command="Close" Executed="CloseButton_Executed"/>
+    </Window.CommandBindings>
+    <Window.Effect>
+        <DropShadowEffect Color="Gray" BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="4"/>
+    </Window.Effect>
+    <DockPanel Margin="4">
+        <Border Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Top" Height="Auto" x:Name="titlebar">
+            <DockPanel WindowChrome.IsHitTestVisibleInChrome="True">
+                <Image DockPanel.Dock="Left" Source="pack://application:,,,/GitTimelapseView;component/Wpf/Resources/appicon.png" Width="20" Height="20" VerticalAlignment="Center" Margin="10 0"></Image>
+                <Menu>
+                    <MenuItem x:Name="FileMenu" Header="File" Style="{StaticResource TitleBarMenuItemStyle}" />
+                    <MenuItem x:Name="ViewMenu" Header="View" Style="{StaticResource TitleBarMenuItemStyle}" />
+                    <MenuItem x:Name="HelpMenu"  Header="Help" Style="{StaticResource TitleBarMenuItemStyle}" />
+                </Menu>
+                <Button x:Name="CloseButton" DockPanel.Dock="Right" ToolTip="Close" Style="{StaticResource TitleBarButtonStyle}" Click="CloseButton_OnClick" Padding="14 0">
+                    <materialDesign:PackIcon Kind="WindowClose"></materialDesign:PackIcon>
+                </Button>
+                <Button x:Name="MaximizeButton" DockPanel.Dock="Right" ToolTip="Maximize" Style="{StaticResource TitleBarButtonStyle}" Click="MaximizeButton_OnClick" Padding="14 0" >
+                    <materialDesign:PackIcon Kind="WindowMaximize"></materialDesign:PackIcon>
+                </Button>
+                <Button x:Name="RestoreButton" DockPanel.Dock="Right" ToolTip="Restore Down" Style="{StaticResource TitleBarButtonStyle}" Click="RestoreButton_OnClick" Padding="14 0" >
+                    <materialDesign:PackIcon Kind="WindowRestore"></materialDesign:PackIcon>
+                </Button>
+                <Button x:Name="MinimizeButton" DockPanel.Dock="Right" ToolTip="Minimize" Style="{StaticResource TitleBarButtonStyle}" Click="MinimizeButton_OnClick" Padding="14 0" >
+                    <materialDesign:PackIcon Kind="WindowMinimize"></materialDesign:PackIcon>
+                </Button>
+                
+                <ItemsControl x:Name="AdditionalCommandsItemsControl" DockPanel.Dock="Right">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Light" Text="{Binding ElementName=_mainWindow, Path=Title}" IsHitTestVisible="False" />
+
+            </DockPanel>
+        </Border>
+        <Grid x:Name="_webViewGrid">
+        </Grid>
+    </DockPanel>
+</Window>

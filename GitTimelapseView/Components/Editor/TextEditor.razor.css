@@ -1,0 +1,22 @@
+.text-editor-grid {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: auto 1fr;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+    border: 1px solid;
+    border-color: var(--gtlv-card-border);
+}
+
+.margin-box {
+    grid-row: 1;
+    grid-column: 1;
+    overflow: hidden;
+}
+
+.editor-box {
+    grid-row: 1;
+    grid-column: 2;
+    overflow: hidden;
+}

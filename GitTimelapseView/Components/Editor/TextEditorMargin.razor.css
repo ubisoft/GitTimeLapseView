@@ -1,0 +1,29 @@
+.editor-margin {
+    height: 100%;
+    margin: 0px;
+    overflow: hidden;
+    background-color: var(--gtlv-card-background);
+    user-select: none;
+}
+
+.revision-row {
+    user-select: none;
+}
+
+.revision-span {
+    width: 18px;
+    display: inline-block;
+    text-align: right;
+    font-size: 10px;
+    margin-top: 4px;
+    margin-left: 1px;
+    opacity: 0.5;
+    user-select: none;
+}
+
+.avatar-span {
+    display: inline-block;
+    margin-top: -4px;
+    margin-left: 2px;
+    user-select: none;
+}

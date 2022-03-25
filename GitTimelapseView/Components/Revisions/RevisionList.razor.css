@@ -1,0 +1,7 @@
+.current-revision {
+    background-color: var(--gtlv-editor-highlight);
+}
+
+.future-revision {
+    opacity: 0.3;
+}

@@ -1,0 +1,135 @@
+﻿@namespace GitTimelapseView
+@using System.Windows
+
+<div class="history-slider">
+	@if (TimelapseService.FileHistory != null)
+	{
+        <input type="range" min="@MinValue" max="@MaxValue" value="@CurrentValue" step="1" @onchange=@OnRevisionChange>
+		<div class="sliderticks">
+		@for (int i = MinValue ; i <= MaxValue ; i++)
+		{
+            var revision = TimelapseService.FileHistory.Revisions[i];
+            var label = GetRevisionLabel(revision);
+            if (!string.IsNullOrEmpty(label))
+            {
+                <RevisionTooltip Revision=@revision>
+			        <p style="font-size: 10px;">@label</p>
+                </RevisionTooltip>
+            }
+		}
+		</div>
+	}
+</div>
+
+@code
+{
+    private const double RequiredSizePerRevision = 24.0;
+    private const int MaximumRevision = 100;
+    private SamplingCache _samplingCache;
+
+    [Inject]
+    TimelapseService TimelapseService { get; set; } = default!;
+
+    [Inject]
+    MessagingService MessagingService { get; set; } = default!;
+
+    private double PixelsPerRevision => RevisionCount > 0 ? Application.Current.MainWindow.ActualWidth / RevisionCount : 0;
+
+    private int CurrentValue => TimelapseService.CurrentFileRevision?.Index ?? 0;
+
+    private int MinValue => Math.Max(0, MaxValue - MaximumRevision);
+
+    private int MaxValue => TimelapseService.FileHistory != null ? TimelapseService.FileHistory.Revisions.Count - 1 : 0;
+
+    private int RevisionCount => (int)(MaxValue - MinValue);
+
+    private SliderMark[] Marks
+    {
+        get
+        {
+            var marks = new List<SliderMark>();
+            if (TimelapseService.FileHistory != null)
+            {
+                foreach(var revision in TimelapseService.FileHistory.Revisions)
+                {
+                    var label = GetRevisionLabel(revision);
+                    if (!string.IsNullOrEmpty(label))
+                    {
+                        marks.Add(new SliderMark(revision.Index, GetMarkContent(revision), ""));
+                    }
+                }
+            }
+            return marks.ToArray();
+        }
+    }
+
+    private RenderFragment GetMarkContent(FileRevision revision) =>
+    @<RevisionTooltip Revision=@revision>
+        <span style="font-size: 10px;">@revision.Label</span>
+    </RevisionTooltip>
+    ;
+
+    public string GetRevisionLabel(FileRevision fileRevision)
+    {
+        var label = fileRevision.Label;
+        var sampling = ComputeSampling();
+        if (sampling > 1)
+        {
+            label = fileRevision.Index % sampling == 0 || fileRevision == TimelapseService.CurrentFileRevision ? label: string.Empty;
+        }
+
+        return label;
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        TimelapseService.CurrentFileRevisionIndexChanging += async (e, args) => await RefreshAsync();
+        Application.Current.MainWindow.SizeChanged += async (e, args) => await RefreshAsync();
+        return base.OnInitializedAsync();
+    }
+
+
+    private async Task OnRevisionChange(ChangeEventArgs eventArgs)
+    {
+        if (eventArgs.Value != null && int.TryParse(eventArgs.Value.ToString(), out var revisionIndex))
+        {
+            await new ChangeCurrentRevisionAction(revisionIndex).ExecuteAsync().ConfigureAwait(false);
+        }
+    }
+
+
+    private int ComputeSampling()
+    {
+        if (_samplingCache.PixelsPerRevision == PixelsPerRevision && _samplingCache.RevisionCount == RevisionCount)
+        {
+            return _samplingCache.Sampling;
+        }
+        var sampling = 1;
+        if (PixelsPerRevision < RequiredSizePerRevision)
+        {
+            var pixelsPerRevision = PixelsPerRevision;
+            while (pixelsPerRevision <= RequiredSizePerRevision && sampling < 50)
+            {
+                sampling++;
+                pixelsPerRevision = PixelsPerRevision * sampling;
+            }
+        }
+
+        _samplingCache.PixelsPerRevision = PixelsPerRevision;
+        _samplingCache.RevisionCount = RevisionCount;
+        _samplingCache.Sampling = sampling;
+        return sampling;
+    }
+
+    public Task RefreshAsync()
+    {
+        return InvokeAsync(() => StateHasChanged());
+    }
+
+    struct SamplingCache
+    {
+        public double PixelsPerRevision;
+        public int RevisionCount;
+        public int Sampling;
+    }
+}

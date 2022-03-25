@@ -1,0 +1,59 @@
+﻿@namespace GitTimelapseView
+
+<Popover Style="display: inline;" Placement=@Placement>
+    <TitleTemplate>
+        <img src="@UserInfo.ProfilePictureUrl" style="vertical-align: middle; width: 24px; height: 24px; border-radius: 50%; margin-right: 5px;"/>
+        <b style="vertical-align: middle;">@Title</b>
+    </TitleTemplate>
+    <ContentTemplate>
+        <div>
+            @if (!string.IsNullOrEmpty(UserInfo.Title))
+			{
+                <span><i class="mdi mdi-badge-account-horizontal-outline"></i>@UserInfo.Title</span><br/>
+			}
+            @if (!string.IsNullOrEmpty(UserInfo.Project))
+			{
+                <span><i class="mdi mdi-office-building-outline"></i>@UserInfo.Project</span><br/>
+			}
+            @if (!string.IsNullOrEmpty(UserInfo.Email))
+			{
+                <span><i class="mdi mdi-email-outline"></i>@UserInfo.Email</span><br/>
+			}
+            @if (!string.IsNullOrEmpty(UserInfo.Location))
+			{
+                <span><i class="mdi mdi-map-marker"></i>@UserInfo.Location</span><br/>
+			}
+        </div>
+    </ContentTemplate>
+    <ChildContent>
+        @ChildContent
+    </ChildContent>
+</Popover>
+
+@code {
+    [Parameter]
+    public UserInfo UserInfo { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public Placement Placement { get; set; } = Placement.Top;
+
+    public string Title
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(UserInfo.DisplayName))
+            {
+                return UserInfo.DisplayName;
+            }
+			else if (!string.IsNullOrEmpty(UserInfo.AccountName))
+			{
+                return UserInfo.AccountName;
+			}
+
+            return UserInfo.Email;
+        }
+	}
+}

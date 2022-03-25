@@ -1,0 +1,15 @@
+﻿@namespace GitTimelapseView
+
+<div class="loading-component" >
+    <h1 class="title">Loading</h1>
+    <h2 class="subtitle">
+       @Text
+    </h2>
+    <div class="separator" />
+   <div class="spinner dot-pulse"></div>
+</div>
+
+@code {
+	[Parameter]
+	public string Text { get; set; } = default!;
+}

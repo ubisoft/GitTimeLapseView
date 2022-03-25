@@ -1,0 +1,20 @@
+<Project>
+    <Target Name="_ResolveCopyLocalNuGetPackagePdbs"
+            Condition="$(CopyLocalLockFileAssemblies) == true"
+            AfterTargets="ResolveReferences">
+        <ItemGroup>
+            <ReferenceCopyLocalPaths
+                Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).pdb')"
+                Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' != ''
+                    and Exists('%(RootDir)%(Directory)%(Filename).pdb')" />
+        </ItemGroup>
+    </Target>
+    <ItemGroup>
+        <None Remove="**\*.yml;**\*.xshd;**\*.xml;**\*.xsl;**\*.xslt;**\*.txt;**\*.bmp;**\*.ico;**\*.cur;**\*.gif;**\*.jpeg;**\*.jpe;**\*.jpg;**\*.png;**\*.dib;**\*.tiff;**\*.tif;**\*.inf;**\*.compositefont;**\*.otf;**\*.ttf;**\*.ttc;**\*.tte" />
+        <Resource Include="**\*.yml;**\*.xshd;**\*.xml;**\*.xsl;**\*.xslt;**\*.txt;**\*.bmp;**\*.ico;**\*.cur;**\*.gif;**\*.jpeg;**\*.jpe;**\*.jpg;**\*.png;**\*.dib;**\*.tiff;**\*.tif;**\*.inf;**\*.compositefont;**\*.otf;**\*.ttf;**\*.ttc;**\*.tte" />
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Remove="obj\**" />
+        <Resource Remove="bin\**" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,35 @@
+﻿@namespace GitTimelapseView
+
+<Result
+    Status="error"
+    Title="@Context.ErrorMessage"
+>
+    <Extra>
+         <Button Type="@ButtonType.Primary" OnClick="OnOpenClicked">OPEN NEW FILE</Button>
+    </Extra>
+    <ChildContent>
+        @if (@Context.Exception != null)
+        {
+             <div class="desc">
+                <Paragraph>
+                    <Text Strong Style="font-size: 16px;">
+                        @Context.Exception.GetType().Name : @Context.Exception.Message
+                    </Text>
+                </Paragraph>
+                <Paragraph Style="white-space: pre-line">
+                    @Context.Exception.StackTrace?.ToString()
+                </Paragraph>
+            </div>
+        }
+    </ChildContent>
+</Result>
+
+@code{
+    [Parameter]
+    public IActionContext Context { get; set; } = default!;
+
+    private void OnOpenClicked()
+	{
+		new OpenFileAction().ExecuteAsync().ConfigureAwait(false);
+	}
+}
