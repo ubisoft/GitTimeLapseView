@@ -19,6 +19,7 @@
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
       <DefaultItemExcludes>$(DefaultItemExcludes);publish/**/*</DefaultItemExcludes>
       <Nullable>enable</Nullable>
+      <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">

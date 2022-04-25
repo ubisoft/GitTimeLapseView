@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Wpf\Resources\appicon.ico</ApplicationIcon>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
