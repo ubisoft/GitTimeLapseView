@@ -7,9 +7,8 @@ on:
 
 jobs:
   build_and_test:
+    name: Build & Test
     runs-on: 'windows-latest'
-    env:
-      TestResultsDirectory: ${{ github.workspace}}/TestResults
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -18,7 +17,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Run tests
-      run: dotnet test --configuration Release --logger trx --results-directory "${{ env.TestResultsDirectory }}"
+      run: dotnet test --configuration Release
   release:
     name: Release
     needs: [ build_and_test ]
