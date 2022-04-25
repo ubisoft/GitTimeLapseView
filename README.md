@@ -1,4 +1,4 @@
-# GitTimeLapseView
+# GitTimelapseView
 
 GitTimelapseView allows you to easily monitor the evolution of your Git files over time. It adds a timeline to your blame view
 
