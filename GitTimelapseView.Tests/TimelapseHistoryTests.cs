@@ -24,7 +24,7 @@ namespace GitTimelapseView.Tests
             history.Initialize(NullLogger.Instance);
 
             Assert.NotNull(history);
-            Assert.GreaterOrEqual(history.Revisions.Count, 3);
+            Assert.GreaterOrEqual(history.Revisions.Count, 1);
         }
 
         private static string? GetThisSourceFilePath([CallerFilePath] string? srcFilePath = null) => srcFilePath;
