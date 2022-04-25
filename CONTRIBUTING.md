@@ -10,7 +10,7 @@ Contributions to this project are released to the public under the [project's op
 ## Submitting a pull request
 
 1. [Fork][fork] and clone the repository
-2. Make sure the tests pass on your machine: `npm run test`
+2. Make sure the tests pass on your machine
 3. Create a new branch: `git checkout -b my-branch-name`
 4. Make your change, add tests, and make sure the tests still pass
 5. Push to your fork and [submit a pull request][pr]
