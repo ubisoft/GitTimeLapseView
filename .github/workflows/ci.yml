@@ -12,7 +12,7 @@ jobs:
       TestResultsDirectory: ${{ github.workspace}}/TestResults
     steps:
     - name: Checkout
-        uses: actions/checkout@v3
+      uses: actions/checkout@v3
     - name: Setup dotnet
       uses: actions/setup-dotnet@v2
         with:
