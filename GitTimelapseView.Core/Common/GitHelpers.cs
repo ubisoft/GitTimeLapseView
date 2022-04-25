@@ -49,6 +49,20 @@ namespace GitTimelapseView.Core.Common
             return gitProcess.StandardOutput.ReadToEnd().Trim();
         }
 
+        public static string? GetRemotePlatform(string remoteUrl)
+        {
+            if (remoteUrl.Contains("github.com", StringComparison.OrdinalIgnoreCase))
+            {
+                return "GitHub";
+            }
+            else if (remoteUrl.Contains("gitlab", StringComparison.OrdinalIgnoreCase))
+            {
+                return "GitLab";
+            }
+
+            return null;
+        }
+
         internal static IReadOnlyList<string> GetCommitFileLines(this Repository repository, string relativeFilePath, string sha)
         {
             var commit = repository.Lookup<Commit>(sha);
@@ -108,20 +122,6 @@ namespace GitTimelapseView.Core.Common
             else if (remoteUrl.Contains("gitlab", StringComparison.OrdinalIgnoreCase))
             {
                 return $"{remoteUrl}/-/commit/{sha}";
-            }
-
-            return null;
-        }
-
-        public static string? GetRemotePlatform(string remoteUrl)
-        {
-            if (remoteUrl.Contains("github.com", StringComparison.OrdinalIgnoreCase))
-            {
-                return "GitHub";
-            }
-            else if (remoteUrl.Contains("gitlab", StringComparison.OrdinalIgnoreCase))
-            {
-                return "GitLab";
             }
 
             return null;
