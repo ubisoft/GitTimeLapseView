@@ -44,6 +44,6 @@ jobs:
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
-          files: "GitTimelapseView*"
+          files: "GitTimelapseView-*"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
