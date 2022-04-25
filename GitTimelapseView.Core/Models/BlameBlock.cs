@@ -6,12 +6,12 @@ namespace GitTimelapseView.Core.Models
 {
     public class BlameBlock
     {
-        public BlameBlock(BlameHunk block, FileRevision fileRevision, IReadOnlyList<string> lines)
+        public BlameBlock(BlameHunk block, FileRevision fileRevision, IReadOnlyList<string> lines, string? remoteUrl)
         {
             InitialSignature = block.InitialSignature;
             FinalSignature = block.FinalSignature;
-            InitialCommit = new Commit(block.InitialCommit, fileRevision.FileHistory);
-            FinalCommit = new Commit(block.FinalCommit, fileRevision.FileHistory);
+            InitialCommit = new Commit(block.InitialCommit, fileRevision.FileHistory, remoteUrl);
+            FinalCommit = new Commit(block.FinalCommit, fileRevision.FileHistory, remoteUrl);
             StartLine = block.FinalStartLineNumber + 1;
             LineCount = block.LineCount;
             FileRevision = fileRevision.FileHistory.GetRevisionPerCommit(FinalCommit);

@@ -1,4 +1,6 @@
 @namespace GitTimelapseView
+@using System.Diagnostics
+@using GitTimelapseView.Core.Common
 
 @if (_commit == null)
 {
@@ -9,28 +11,32 @@ else
 {
     <Card Size="small" class="commit-details" Style="height: 100%">
 	    <TitleTemplate>
-		    <div class="card-title" style="font-weight: bolder;">
+		    <div class="card-title">
 			    <span title=@_commit.Id>
 				    Commit #@_commit.ShortId
 			    </span>
                 <Tooltip Title=@CopyToClipboardTooltip>
                     <Button Type="@ButtonType.Text" @onclick="OnButtonClicked" Size="@ButtonSize.Small">
-                        <i class="mdi mdi-clipboard-multiple-outline"></i>
+                        <i class="mdi mdi-clipboard-multiple-outline" />
                     </Button>
                 </Tooltip>
-                <span style="font-size: 12px;">by</span>
+                <span>by</span>
                 <span>
 			        <AvatarExt Email=@_commit.Author.Email ShowDisplayName />
                 </span>
-			    <span style="font-size: 12px;">on @_authoredString</span>
-		    </div>
+			    <span>on @_authoredString</span>
+                @if(_commit.WebUrl != null && GitHelpers.GetRemotePlatform(_commit.WebUrl) is string platform)
+                {
+                    <a class="open-remote-url" title=@($"Open commit in {platform}") href="" @onclick="OnWebUrlClicked" @onclick:preventDefault><i class="mdi mdi-open-in-new " />&nbsp;@platform</a>
+                }
+            </div>
 	    </TitleTemplate>
         <Extra>
             @if(!string.IsNullOrEmpty(_commit.ContainedInTag))
                 {
                     <Tooltip Title=@($"contained in tag {_commit.ContainedInTag}")>
-                        <span style="opacity:0.4; margin-left: 20px; font-size: 12px;">
-                            <i class="mdi mdi-tag" ></i>
+                        <span class="tag-label" >
+                            <i class="mdi mdi-tag" />
                             @_commit.ContainedInTag
                         </span>
                     </Tooltip>
@@ -39,7 +45,7 @@ else
         <CardTabs>
 	        <Tabs @bind-ActiveKey="@_selectedTab" Animated Size="@TabSize.Small" >
 			    <TabPane Tab="Message" Key="message">
-                    <div style="margin:10px; overflow: scroll; max-height: 220px; max-width: 750px; overflow-y: scroll; overflow-x: scroll;white-space: pre-wrap;">
+                    <div class="commit-message">
 				        @_commit.Message
                     </div>
 			    </TabPane >
@@ -86,5 +92,17 @@ else
         {
             await new CopyToClipboardAction(TimelapseService.CurrentCommit.Id, "commit id").ExecuteAsync().ConfigureAwait(false);
         }
-	}
+    }
+
+    private void OnWebUrlClicked()
+    {
+        if (_commit?.WebUrl != null)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = _commit?.WebUrl,
+                UseShellExecute = true,
+            });
+        }
+    }
 }

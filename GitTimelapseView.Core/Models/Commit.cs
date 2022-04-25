@@ -12,7 +12,7 @@ namespace GitTimelapseView.Core.Models
     {
         private readonly List<FileChange> _fileChanges = new();
 
-        public Commit(LibGit2Sharp.Commit commit, FileHistory fileHistory)
+        public Commit(LibGit2Sharp.Commit commit, FileHistory fileHistory, string? remoteUrl)
         {
             Message = commit.Message;
             MessageShort = commit.MessageShort;
@@ -22,6 +22,10 @@ namespace GitTimelapseView.Core.Models
             Committer = commit.Committer;
             FileHistory = fileHistory;
             Parents = commit.Parents.Select(x => x.Sha).ToArray();
+            if (remoteUrl != null)
+            {
+                WebUrl = GitHelpers.GetCommitUrl(remoteUrl, commit.Sha);
+            }
         }
 
         public string Message { get; init; }
@@ -43,6 +47,8 @@ namespace GitTimelapseView.Core.Models
         public FileHistory FileHistory { get; }
 
         public string? ContainedInTag { get; private set; }
+
+        public string? WebUrl { get; }
 
         public void UpdateInfo(ILogger logger)
         {

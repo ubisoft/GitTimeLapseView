@@ -49,6 +49,20 @@ namespace GitTimelapseView.Core.Common
             return gitProcess.StandardOutput.ReadToEnd().Trim();
         }
 
+        public static string? GetRemotePlatform(string remoteUrl)
+        {
+            if (remoteUrl.Contains("github.com", StringComparison.OrdinalIgnoreCase))
+            {
+                return "GitHub";
+            }
+            else if (remoteUrl.Contains("gitlab", StringComparison.OrdinalIgnoreCase))
+            {
+                return "GitLab";
+            }
+
+            return null;
+        }
+
         internal static IReadOnlyList<string> GetCommitFileLines(this Repository repository, string relativeFilePath, string sha)
         {
             var commit = repository.Lookup<Commit>(sha);
@@ -77,6 +91,40 @@ namespace GitTimelapseView.Core.Common
             var fullPath = new Uri(filePath, UriKind.Absolute);
             var relRoot = new Uri(repository.Info.WorkingDirectory, UriKind.Absolute);
             return relRoot.MakeRelativeUri(fullPath).ToString();
+        }
+
+        internal static string? FindRemoteUrl(this Repository repository)
+        {
+            if (repository.Network.Remotes.Any())
+            {
+                var remote = repository.Network.Remotes.First();
+                var url = remote.Url;
+                if (url.EndsWith(".git", StringComparison.Ordinal))
+                {
+                    if (url.StartsWith("git", StringComparison.Ordinal))
+                    {
+                        url = url.Replace(":", "/", StringComparison.Ordinal).Replace("git@", "https://", StringComparison.Ordinal);
+                    }
+
+                    return url.Replace(".git", string.Empty, StringComparison.Ordinal).TrimEnd('/');
+                }
+            }
+
+            return null;
+        }
+
+        internal static string? GetCommitUrl(string remoteUrl, string sha)
+        {
+            if (remoteUrl.Contains("github.com", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"{remoteUrl}/commit/{sha}";
+            }
+            else if (remoteUrl.Contains("gitlab", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"{remoteUrl}/-/commit/{sha}";
+            }
+
+            return null;
         }
 
         private static void HandleGitCommandErrors(object? sender, ILogger logger, string? onGitErrorMessage = null)
