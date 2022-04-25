@@ -49,6 +49,8 @@ namespace GitTimelapseView.Core.Models
             var commitIds = GetFileCommitIDs(logger).Reverse().ToArray();
             using (var repository = new Repository(GitRootPath))
             {
+                var remoteUrl = repository.FindRemoteUrl();
+
                 var relativeFilePath = repository.MakeRelativeFilePath(FilePath);
                 if (relativeFilePath == null)
                     throw new Exception($"Unable to blame '{FilePath}'. Path is not located in the repository working directory.");
@@ -57,7 +59,7 @@ namespace GitTimelapseView.Core.Models
                 {
                     var commitId = commitIds[index];
                     var commit = repository.Lookup<LibGit2Sharp.Commit>(commitId);
-                    _revisions.Add(new FileRevision(index, new Commit(commit, this), this));
+                    _revisions.Add(new FileRevision(index, new Commit(commit, this, remoteUrl), this));
                 }
             }
         }

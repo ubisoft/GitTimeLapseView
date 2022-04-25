@@ -34,6 +34,8 @@ namespace GitTimelapseView.Core.Models
 
             using (var repository = new Repository(FileHistory.GitRootPath))
             {
+                var remoteUrl = repository.FindRemoteUrl();
+
                 var relativeFilePath = repository.MakeRelativeFilePath(FileHistory.FilePath);
                 if (relativeFilePath == null)
                     throw new Exception($"Unable to blame '{FileHistory.FilePath}'. Path is not located in the repository working directory.");
@@ -43,7 +45,7 @@ namespace GitTimelapseView.Core.Models
 
                 foreach (var block in blocks)
                 {
-                    Blocks.Add(new BlameBlock(block, this, lines));
+                    Blocks.Add(new BlameBlock(block, this, lines, remoteUrl));
                 }
             }
         }
