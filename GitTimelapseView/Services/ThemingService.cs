@@ -1,5 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿// Copyright (c) Ubisoft. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 

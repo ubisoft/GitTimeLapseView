@@ -1,5 +1,7 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿// Copyright (c) Ubisoft. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System.IO;
 using GitTimelapseView.Core.Common;
 using GitTimelapseView.Core.Models;
 using GitTimelapseView.Extensions;

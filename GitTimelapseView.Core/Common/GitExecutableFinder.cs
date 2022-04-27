@@ -1,5 +1,6 @@
-﻿using System;
-using System.IO;
+﻿// Copyright (c) Ubisoft. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
 using Microsoft.Win32;
 
 namespace GitTimelapseView.Common

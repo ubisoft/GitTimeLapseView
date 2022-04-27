@@ -1,4 +1,7 @@
-﻿using GitTimelapseView.Extensions;
+﻿// Copyright (c) Ubisoft. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using GitTimelapseView.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GitTimelapseView.Helpers
