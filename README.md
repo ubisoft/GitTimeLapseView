@@ -14,4 +14,4 @@ We would love you to contribute to `@ubisoft/GitTimeLapseView`, pull requests ar
 
 ## License
 
-The scripts and documentation in this project are released under the [MIT License](LICENSE)
+The scripts and documentation in this project are released under the [Apache License](LICENSE)
