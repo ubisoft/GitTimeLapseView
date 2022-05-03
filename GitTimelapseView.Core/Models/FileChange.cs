@@ -1,4 +1,7 @@
-﻿using LibGit2Sharp;
+﻿// Copyright (c) Ubisoft. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using LibGit2Sharp;
 
 namespace GitTimelapseView.Core.Models
 {

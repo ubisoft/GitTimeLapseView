@@ -200,6 +200,9 @@ dotnet_diagnostic.SA1629.severity=silent
 dotnet_diagnostic.SA1611.severity=silent
 dotnet_diagnostic.SA1615.severity=silent
 
+## Header
+file_header_template = Copyright (c) Ubisoft. All Rights Reserved.\nLicensed under the Apache License, Version 2.0.
+
 ## Naming conventions
 
 # IDE0090: Use 'new(...)'

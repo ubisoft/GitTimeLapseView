@@ -1,7 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Ubisoft. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using GitTimelapseView.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

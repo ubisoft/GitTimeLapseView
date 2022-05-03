@@ -1,10 +1,8 @@
-﻿using System;
+﻿// Copyright (c) Ubisoft. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using GitTimelapseView.Common;
 using GitTimelapseView.Core.Common;
 using LibGit2Sharp;
