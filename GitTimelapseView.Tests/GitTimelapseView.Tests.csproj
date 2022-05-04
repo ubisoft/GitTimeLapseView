@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPublishable>false</IsPublishable>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitTimelapseView.Core\GitTimelapseView.Core.csproj" />
   </ItemGroup>
