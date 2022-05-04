@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ubisoft. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
-using System.Text;
 using GitTimelapseView.Extensions;
 using GitTimelapseView.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,12 +22,10 @@ namespace GitTimelapseView.Actions
             if (application == null)
                 return Task.CompletedTask;
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"Version: {application.ApplicationVersion}");
             var messagingService = application.ServiceProvider.GetService<MessagingService>();
             if (messagingService != null)
             {
-                messagingService.ShowInformationDialog(sb.ToString());
+                messagingService.ShowInformationDialog($"Version: {application.ApplicationVersion}");
             }
 
             return Task.CompletedTask;
