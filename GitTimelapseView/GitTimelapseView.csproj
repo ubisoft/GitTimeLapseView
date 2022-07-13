@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Plugins\**\*.csproj" />
     <ProjectReference Include="..\GitTimelapseView.Core\GitTimelapseView.Core.csproj" />
     <ProjectReference Include="..\GitTimelapseView.Extensions\GitTimelapseView.Extensions.csproj" />
   </ItemGroup>
