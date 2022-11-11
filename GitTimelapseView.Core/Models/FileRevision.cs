@@ -19,11 +19,6 @@ namespace GitTimelapseView.Core.Models
 
         public Commit Commit { get; }
 
-        /// <summary>
-        /// FileName at the time of the commit.
-        /// </summary>
-        private string CommitIdFileName { get; }
-
         public int Index { get; }
 
         public string Label => $"{Index + 1}";
@@ -31,6 +26,11 @@ namespace GitTimelapseView.Core.Models
         public FileHistory FileHistory { get; }
 
         public IList<BlameBlock> Blocks { get; } = new List<BlameBlock>();
+
+        /// <summary>
+        /// FileName at the time of the commit.
+        /// </summary>
+        private string CommitIdFileName { get; }
 
         public void LoadBlocks(ILogger logger)
         {
