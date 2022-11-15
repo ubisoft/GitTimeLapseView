@@ -56,8 +56,8 @@ namespace GitTimelapseView.Core.Models
                 for (var index = 0; index < commitIds.Length; index++)
                 {
                     var commitId = commitIds[index];
-                    var commit = repository.Lookup<LibGit2Sharp.Commit>(commitId);
-                    _revisions.Add(new FileRevision(index, new Commit(commit, this, remoteUrl), this));
+                    var commit = repository.Lookup<LibGit2Sharp.Commit>(commitId.Commit);
+                    _revisions.Add(new FileRevision(index, new Commit(commit, this, remoteUrl), commitId.FilePath, this));
                 }
             }
         }
@@ -96,9 +96,9 @@ namespace GitTimelapseView.Core.Models
             return revision;
         }
 
-        private IReadOnlyList<string> GetFileCommitIDs(ILogger logger)
+        private IReadOnlyList<FileCommitId> GetFileCommitIDs(ILogger logger)
         {
-            List<string> commitIDs = new();
+            List<FileCommitId> commitIDs = new();
             var isFirstTime = true;
 
             var filePath = FilePath;
@@ -115,11 +115,11 @@ namespace GitTimelapseView.Core.Models
                     commitIDs.RemoveAt(0);
                 }
 
-                commitIDs.AddRange(result);
+                commitIDs.AddRange(result.Select(x => new FileCommitId { Commit = x, FilePath = filePath }));
 
                 isFirstTime = false;
             }
-            while (GetRenamedPath(logger, commitIDs[commitIDs.Count - 1], filePath, out filePath));
+            while (GetRenamedPath(logger, commitIDs[commitIDs.Count - 1].Commit, filePath, out filePath));
 
             return commitIDs;
         }
@@ -222,6 +222,17 @@ namespace GitTimelapseView.Core.Models
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// This is the commit for a given file but since the file path
+        /// can change across commits, this keeps the file name at the time the commit was made.
+        /// </summary>
+        private struct FileCommitId
+        {
+            public string Commit { get; set; }
+
+            public string FilePath { get; set; }
         }
     }
 }

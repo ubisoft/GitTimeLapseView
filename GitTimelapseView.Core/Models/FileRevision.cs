@@ -9,11 +9,12 @@ namespace GitTimelapseView.Core.Models
 {
     public class FileRevision
     {
-        public FileRevision(int index, Commit commit, FileHistory fileHistory)
+        public FileRevision(int index, Commit commit, string commitIdFileName, FileHistory fileHistory)
         {
             Index = index;
             FileHistory = fileHistory;
             Commit = commit;
+            CommitIdFileName = commitIdFileName;
         }
 
         public Commit Commit { get; }
@@ -26,6 +27,11 @@ namespace GitTimelapseView.Core.Models
 
         public IList<BlameBlock> Blocks { get; } = new List<BlameBlock>();
 
+        /// <summary>
+        /// FileName at the time of the commit.
+        /// </summary>
+        private string CommitIdFileName { get; }
+
         public void LoadBlocks(ILogger logger)
         {
             if (Blocks.Any())
@@ -35,9 +41,9 @@ namespace GitTimelapseView.Core.Models
             {
                 var remoteUrl = repository.FindRemoteUrl();
 
-                var relativeFilePath = repository.MakeRelativeFilePath(FileHistory.FilePath);
+                var relativeFilePath = repository.MakeRelativeFilePath(CommitIdFileName);
                 if (relativeFilePath == null)
-                    throw new Exception($"Unable to blame '{FileHistory.FilePath}'. Path is not located in the repository working directory.");
+                    throw new Exception($"Unable to blame '{CommitIdFileName}'. Path is not located in the repository working directory.");
 
                 var blocks = repository.Blame(relativeFilePath, new BlameOptions { StartingAt = Commit.Id });
                 var lines = repository.GetCommitFileLines(relativeFilePath, Commit.Id);
