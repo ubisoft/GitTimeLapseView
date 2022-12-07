@@ -104,7 +104,7 @@ namespace GitTimelapseView.Core.Models
             var filePath = FilePath;
             do
             {
-                var args = $"rev-list --first-parent HEAD -- \"{filePath}\"";
+                var args = $"rev-list HEAD -- \"{filePath}\"";
                 var result = GitHelpers.RunGitCommand(GitRootPath, args, logger).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 if (result.Count == 0)
