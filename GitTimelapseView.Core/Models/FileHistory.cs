@@ -20,7 +20,11 @@ namespace GitTimelapseView.Core.Models
             FilePath = filePath;
             try
             {
-                GitRootPath = Repository.Discover(filePath).Replace(@".git\", string.Empty, StringComparison.Ordinal);
+                var repositoryPath = Repository.Discover(filePath);
+                if (repositoryPath.Contains("\\.git\\modules\\", StringComparison.OrdinalIgnoreCase))
+                    GitRootPath = repositoryPath;
+                else
+                    GitRootPath = repositoryPath.Replace(@".git\", string.Empty, StringComparison.Ordinal);
             }
             catch (Exception)
             {
@@ -112,7 +116,7 @@ namespace GitTimelapseView.Core.Models
 
                 if (commitIDs.Count > 1 && !isFirstTime)
                 {
-                    commitIDs.RemoveAt(0);
+                    commitIDs.RemoveAt(commitIDs.Count - 1);
                 }
 
                 commitIDs.AddRange(result.Select(x => new FileCommitId { Commit = x, FilePath = filePath }));

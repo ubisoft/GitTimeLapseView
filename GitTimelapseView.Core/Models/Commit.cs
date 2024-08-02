@@ -64,7 +64,7 @@ namespace GitTimelapseView.Core.Models
                 var changes = repository.Diff.Compare<TreeChanges>(parents.FirstOrDefault()?.Tree, commit?.Tree);
                 foreach (var change in changes)
                 {
-                    _fileChanges.Add(new FileChange(this, change));
+                    _fileChanges.Add(new FileChange(this, change, repository.Info.WorkingDirectory));
                 }
             }
 

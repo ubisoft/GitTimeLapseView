@@ -7,12 +7,12 @@ namespace GitTimelapseView.Core.Models
 {
     public sealed class FileChange
     {
-        public FileChange(Commit commit, TreeEntryChanges change)
+        public FileChange(Commit commit, TreeEntryChanges change, string workingDirectory)
         {
             Commit = commit;
             ChangeKind = change.Status;
-            Path = change.Path;
-            OldPath = change.OldPath;
+            Path = string.IsNullOrEmpty(change.Path) ? string.Empty : System.IO.Path.GetFullPath(System.IO.Path.Combine(workingDirectory, change.Path));
+            OldPath = string.IsNullOrEmpty(change.OldPath) ? string.Empty : System.IO.Path.GetFullPath(System.IO.Path.Combine(workingDirectory, change.OldPath));
             Name = System.IO.Path.GetFileName(Path);
         }
 
