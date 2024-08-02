@@ -25,15 +25,16 @@ namespace GitTimelapseView.Actions
 
         public override Task ExecuteAsync(IActionContext context)
         {
-            context.TrackingProperties["Path"] = _fileChange.Path;
+            var oldPath = _fileChange.OldPath;
+            var path = _fileChange.Path;
+
+            context.TrackingProperties["Path"] = path;
             context.TrackingProperties["CommitId"] = _commitId;
 
-            context.LogInformation($"Diffing '{_fileChange.Path}' with commit '{_commitId}'");
-            var oldPath = string.IsNullOrEmpty(_fileChange.OldPath) ? string.Empty : Path.GetFullPath(Path.Combine(_fileChange.Commit.FileHistory.GitRootPath, _fileChange.OldPath));
-            var path = string.IsNullOrEmpty(_fileChange.Path) ? string.Empty : Path.GetFullPath(Path.Combine(_fileChange.Commit.FileHistory.GitRootPath, _fileChange.Path));
+            context.LogInformation($"Diffing '{path}' with commit '{_commitId}'");
 
-            var errorMessage = $"Could not launch difftool on {_fileChange.Path} for commit {_commitId}";
-            var args = path.Equals(oldPath, System.StringComparison.OrdinalIgnoreCase) ? $"difftool -y {_commitId}^ {_commitId} {path}".Trim(' ') : $"difftool -y {_commitId}^ {_commitId} {oldPath} {path}".Trim(' ');
+            var errorMessage = $"Could not launch difftool on {path} for commit {_commitId}";
+            var args = path.Equals(oldPath, StringComparison.OrdinalIgnoreCase) ? $"difftool -y {_commitId}^ {_commitId} {path}".Trim(' ') : $"difftool -y {_commitId}^ {_commitId} {oldPath} {path}".Trim(' ');
             GitHelpers.RunGitCommand(_fileChange.Commit.FileHistory.GitRootPath, args, context, errorMessage);
 
             return Task.CompletedTask;
