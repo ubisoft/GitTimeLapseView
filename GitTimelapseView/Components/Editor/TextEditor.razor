@@ -89,7 +89,7 @@
         {
             try
             {
-                _model = await MonacoEditor.CreateModel(newValue, null, TimelapseService.FilePath);
+                _model = await MonacoEditor.CreateModel(newValue, null, null);
                 await _editor.SetModel(_model);
                 if (TimelapseService.InitialLineNumber != null)
                 {
