@@ -65,7 +65,7 @@
 
     public void OnPathClicked(FileChangeTableRow fileChangeRow)
     {
-        new OpenFileAction(fileChangeRow.Path, null, null, fileChangeRow.FileChange.Commit.Id).ExecuteAsync().ConfigureAwait(false);
+        new OpenFileAction(fileChangeRow.Path, revisionSha: fileChangeRow.FileChange.Commit.Id).ExecuteAsync().ConfigureAwait(false);
     }
 
     public class FileChangeTableRow
