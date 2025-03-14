@@ -8,7 +8,7 @@ namespace GitTimelapseView.Extensions
     public interface IActionContext : ILogger
     {
         /// <summary>
-        /// Current state
+        /// Gets current state
         /// </summary>
         ActionState State { get; }
 

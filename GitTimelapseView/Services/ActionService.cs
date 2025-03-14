@@ -13,7 +13,7 @@ namespace GitTimelapseView.Services
         private readonly ILogger _logger;
         private readonly TelemetryService _telemetryService;
         private readonly PageProgressService _pageProgressService;
-        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
         private ActionContext? _currentAction;
 
         public ActionService(ILoggerFactory loggerFactory, TelemetryService telemetryService, MessagingService messagingService, PageProgressService pageProgressService)
@@ -130,8 +130,7 @@ namespace GitTimelapseView.Services
 
             public ActionState State { get; set; } = ActionState.Unknown;
 
-            public IDisposable? BeginScope<TState>(TState state)
-                where TState : notnull
+            public IDisposable BeginScope<TState>(TState state)
             {
                 return _logger.BeginScope(state);
             }

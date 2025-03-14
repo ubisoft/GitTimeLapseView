@@ -9,7 +9,7 @@
 
       <!-- Compile Options -->
       <LangVersion>10.0</LangVersion>
-      <TargetFramework>net6.0-windows</TargetFramework>
+      <TargetFramework>net8.0-windows</TargetFramework>
       <Deterministic>true</Deterministic>
       <Features>strict</Features>
       <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -31,10 +31,10 @@
       <Using Include="System.Reflection" />
       <Using Include="System.IO" />
     </ItemGroup>
-  
+
     <ItemGroup>
       <PackageReference Include="MinVer" PrivateAssets="All" Version="2.5.0" />
-    
+
       <PackageReference Include="Meziantou.Analyzer" Version="1.0.697">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

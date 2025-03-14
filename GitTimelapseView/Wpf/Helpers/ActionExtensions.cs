@@ -21,7 +21,11 @@ namespace GitTimelapseView.Wpf.Helpers
             if (action.Children.Any())
             {
                 var content = new StackPanel { Orientation = Orientation.Horizontal };
-                content.Children.Add(GetIcon(action.Icon));
+                if (GetIcon(action.Icon) is { } icon)
+                {
+                    content.Children.Add(icon);
+                }
+
                 content.Children.Add(new PackIcon { Kind = PackIconKind.MenuDown });
                 button.Content = content;
 
@@ -61,7 +65,7 @@ namespace GitTimelapseView.Wpf.Helpers
             return menuItem;
         }
 
-        public static UIElement? GetIcon(object? icon)
+        private static UIElement? GetIcon(object? icon)
         {
             if (icon is string str)
             {
@@ -69,10 +73,8 @@ namespace GitTimelapseView.Wpf.Helpers
                 {
                     return new PackIcon { Kind = packIconKind };
                 }
-                else
-                {
-                    return new Image { Source = new BitmapImage(new Uri(str)), Width = 20, Height = 20 };
-                }
+
+                return new Image { Source = new BitmapImage(new Uri(str)), Width = 20, Height = 20 };
             }
 
             return null;

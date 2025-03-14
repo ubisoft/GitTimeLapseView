@@ -8,12 +8,12 @@ namespace GitTimelapseView.Services
 {
     public class ThemingService : ServiceBase
     {
-        private readonly ThemeInfo _lightTheme = new ThemeInfo("Light")
+        private readonly ThemeInfo _lightTheme = new("Light")
         {
             MonacoTheme = "vs",
         };
 
-        private readonly ThemeInfo _darkTheme = new ThemeInfo("Dark")
+        private readonly ThemeInfo _darkTheme = new("Dark")
         {
             IsDark = true,
             MonacoTheme = "vs-dark",

@@ -44,7 +44,7 @@
     private MonacoEditor? _editor;
     private TextModel? _model;
     private string _previousValue = string.Empty;
-    private List<string> _currentDecorations = new List<string>();
+    private List<string> _currentDecorations = new();
     private bool _didInit;
 
     [Inject]

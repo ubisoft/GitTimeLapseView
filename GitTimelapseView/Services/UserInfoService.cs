@@ -51,20 +51,18 @@ namespace GitTimelapseView.Services
 
         private static string GetGravatarProfileUrl(string email)
         {
-            using (var md5 = System.Security.Cryptography.MD5.Create())
+            using var md5 = System.Security.Cryptography.MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(email.ToLowerInvariant().Trim(' '));
+            var hashBytes = md5.ComputeHash(inputBytes);
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < hashBytes.Length; i++)
             {
-                var inputBytes = Encoding.ASCII.GetBytes(email.ToLowerInvariant().Trim(' '));
-                var hashBytes = md5.ComputeHash(inputBytes);
-
-                var sb = new StringBuilder();
-                for (var i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.AppendFormat(CultureInfo.InvariantCulture, "{0:X2}", hashBytes[i]);
-                }
-
-                var hash = sb.ToString().ToLowerInvariant();
-                return $"https://www.gravatar.com/avatar/{hash}";
+                sb.AppendFormat(CultureInfo.InvariantCulture, "{0:X2}", hashBytes[i]);
             }
+
+            var hash = sb.ToString().ToLowerInvariant();
+            return $"https://www.gravatar.com/avatar/{hash}";
         }
     }
 }

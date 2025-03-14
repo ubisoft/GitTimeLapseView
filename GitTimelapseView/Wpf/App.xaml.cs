@@ -69,7 +69,7 @@ namespace GitTimelapseView
 
         public string[] StartupArguments { get; private set; } = Array.Empty<string>();
 
-        public StartupOptions StartupOptions { get; private set; } = new StartupOptions();
+        public StartupOptions StartupOptions { get; private set; } = new();
 
         public string ApplicationDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ApplicationName);
 
