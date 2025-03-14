@@ -27,7 +27,9 @@
 			<i class="mdi mdi-alpha-c-box change-icon" style="color: red;" title="Conflict"></i>
 		}
     </Column>
-    <Column @bind-Field="@context.Path" Title="Path" Width="520" Ellipsis Sortable Filterable />
+    <Column @bind-Field="@context.Path" Title="Path" Width="520" Ellipsis Sortable Filterable>
+        <Button Type="@ButtonType.Link" OnClick="()=>OnPathClicked(context)" Size="@ButtonSize.Small">@context.Path</Button>
+    </Column>
     <ActionColumn Width="60">
         <div class="actions">
             <Tooltip Title="@DiffTooltip">
@@ -59,6 +61,11 @@
     public void OnRowClicked(FileChangeTableRow fileChangeRow)
     {
         new DiffFileChangeAction(fileChangeRow.FileChange, CommitId).ExecuteAsync().ConfigureAwait(false);
+    }
+
+    public void OnPathClicked(FileChangeTableRow fileChangeRow)
+    {
+        new OpenFileAction(fileChangeRow.Path, revisionSha: fileChangeRow.FileChange.Commit.Id).ExecuteAsync().ConfigureAwait(false);
     }
 
     public class FileChangeTableRow

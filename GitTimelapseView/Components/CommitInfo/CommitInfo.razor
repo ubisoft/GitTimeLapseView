@@ -43,7 +43,7 @@ else
                 }
         </Extra>
         <CardTabs>
-	        <Tabs @bind-ActiveKey="@_selectedTab" Animated Size="@TabSize.Small" >
+	        <Tabs @bind-ActiveKey="@TimelapseService.CommitInfoSelectedTab" Animated Size="@TabSize.Small" >
 			    <TabPane Tab="Message" Key="message">
                     <div class="commit-message">
 				        @_commit.Message
@@ -66,7 +66,6 @@ else
     MessageService MessageService { get; set; } = default!;
 
     private Commit? _commit;
-    string _selectedTab = "message";
     private string _authoredString => _commit?.Author.When.ToString("dd/MM/yyyy @ hh:mm") ?? string.Empty;
     private const string CopyToClipboardTooltip = "Copy complete id to clipboard";
 

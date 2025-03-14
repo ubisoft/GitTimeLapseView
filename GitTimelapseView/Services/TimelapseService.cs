@@ -16,6 +16,7 @@ namespace GitTimelapseView.Services
         public TimelapseService(ILoggerFactory loggerFactory)
             : base(loggerFactory)
         {
+            CommitInfoSelectedTab = "message";
         }
 
         public event EventHandler<string>? FileLoading;
@@ -53,6 +54,8 @@ namespace GitTimelapseView.Services
         }
 
         public int? InitialLineNumber { get; set; }
+
+        public string CommitInfoSelectedTab { get; set; }
 
         public async Task OpenFileAsync(ILogger logger, string filePath, int? lineNumber, int? revisionIndex, string? revisionSha)
         {
