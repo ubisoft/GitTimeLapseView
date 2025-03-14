@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using GitTimelapseView.Actions;
 using GitTimelapseView.Extensions;
 using GitTimelapseView.Helpers;
@@ -36,8 +35,8 @@ namespace GitTimelapseView
             _themingService = themingService;
             if (timelapseService != null)
             {
-                timelapseService.FileLoading += (sender, args) => UpdateTitle();
-                timelapseService.CurrentFileRevisionIndexChanged += (sender, args) => UpdateTitle();
+                timelapseService.FileLoading += (_, _) => UpdateTitle();
+                timelapseService.CurrentFileRevisionIndexChanged += (_, _) => UpdateTitle();
             }
 
             UpdateTitle();
@@ -114,7 +113,7 @@ namespace GitTimelapseView
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateWindowButtonStates();
-            StateChanged += (x, args) => UpdateWindowButtonStates();
+            StateChanged += (_, _) => UpdateWindowButtonStates();
             InitializeActions();
         }
 
@@ -142,7 +141,7 @@ namespace GitTimelapseView
 
         private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            new OpenFileAction().ExecuteAsync().ConfigureAwait(false);
+            _ = new OpenFileAction().ExecuteAsync().ConfigureAwait(false);
         }
 
         private void CloseButton_Executed(object sender, ExecutedRoutedEventArgs e) => ExitApplication();
@@ -202,7 +201,7 @@ namespace GitTimelapseView
                         IsChecked = _themingService.Theme == theme,
                         Tag = theme,
                     };
-                    themeMenuItem.Click += (sender, args) =>
+                    themeMenuItem.Click += (_, _) =>
                     {
                         _themingService.ApplyTheme(theme);
                         UpdateCheckedState(appearanceMenuItem);

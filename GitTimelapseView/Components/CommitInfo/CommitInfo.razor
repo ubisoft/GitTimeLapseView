@@ -9,14 +9,14 @@
 }
 else
 {
-    <Card Size="small" class="commit-details" Style="height: 100%">
+    <Card Size="CardSize.Small" class="commit-details" Style="height: 100%">
 	    <TitleTemplate>
 		    <div class="card-title">
 			    <span title=@_commit.Id>
 				    Commit #@_commit.ShortId
 			    </span>
                 <Tooltip Title=@CopyToClipboardTooltip>
-                    <Button Type="@ButtonType.Text" @onclick="OnButtonClicked" Size="@ButtonSize.Small">
+                    <Button Type="@ButtonType.Text" OnClick="OnButtonClicked" Size="@ButtonSize.Small">
                         <i class="mdi mdi-clipboard-multiple-outline" />
                     </Button>
                 </Tooltip>
@@ -42,7 +42,7 @@ else
                     </Tooltip>
                 }
         </Extra>
-        <CardTabs>
+        <ChildContent>
 	        <Tabs @bind-ActiveKey="@TimelapseService.CommitInfoSelectedTab" Animated Size="@TabSize.Small" >
 			    <TabPane Tab="Message" Key="message">
                     <div class="commit-message">
@@ -53,55 +53,6 @@ else
 					<FileChanges Changes="@_commit.FileChanges" CommitId="@_commit.Id"></FileChanges>
 			    </TabPane >
 		    </Tabs>
-        </CardTabs>
+        </ChildContent>
     </Card>
-}
-
-@code {
-
-    [Inject]
-    TimelapseService TimelapseService { get; set; } = default!;
-
-    [Inject]
-    MessageService MessageService { get; set; } = default!;
-
-    private Commit? _commit;
-    private string _authoredString => _commit?.Author.When.ToString("dd/MM/yyyy @ hh:mm") ?? string.Empty;
-    private const string CopyToClipboardTooltip = "Copy complete id to clipboard";
-
-    protected override async Task OnInitializedAsync()
-    {
-        TimelapseService.CurrentCommitChanged += async (e, args) => await UpdateAsync().ConfigureAwait(false);
-        await UpdateAsync().ConfigureAwait(false);
-        await base.OnInitializedAsync();
-    }
-
-    private async Task UpdateAsync()
-    {
-        if (TimelapseService.FileHistory != null && TimelapseService.CurrentCommit != null)
-        {
-            _commit = TimelapseService.CurrentCommit;
-        }
-        await InvokeAsync(() => StateHasChanged());
-    }
-
-    private async Task OnButtonClicked()
-    {
-        if (TimelapseService.CurrentCommit != null)
-        {
-            await new CopyToClipboardAction(TimelapseService.CurrentCommit.Id, "commit id").ExecuteAsync().ConfigureAwait(false);
-        }
-    }
-
-    private void OnWebUrlClicked()
-    {
-        if (_commit?.WebUrl != null)
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = _commit?.WebUrl,
-                UseShellExecute = true,
-            });
-        }
-    }
 }

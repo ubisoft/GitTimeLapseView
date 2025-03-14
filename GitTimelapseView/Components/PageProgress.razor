@@ -14,7 +14,7 @@
         base.OnParametersSet();
         if (PageProgressService != null)
         {
-            PageProgressService.PropertyChanged += (e, args) => InvokeAsync(StateHasChanged);
+            PageProgressService.PropertyChanged += (_, _) => InvokeAsync(StateHasChanged);
         }
     }
 }

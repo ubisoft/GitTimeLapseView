@@ -13,7 +13,7 @@ namespace GitTimelapseView.Actions
 
         public object? Icon { get; set; }
 
-        public virtual IAction[] Children { get; set; } = Array.Empty<IAction>();
+        public virtual IAction[] Children { get; set; } = [];
 
         public string? InputGestureText { get; set; } = string.Empty;
 

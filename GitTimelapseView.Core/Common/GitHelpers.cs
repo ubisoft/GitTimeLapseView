@@ -40,7 +40,7 @@ namespace GitTimelapseView.Core.Common
                 throw new InvalidOperationException("Cannot start git.exe");
 
             gitProcess.EnableRaisingEvents = true;
-            gitProcess.Exited += (sender, e) => HandleGitCommandErrors(sender, logger, onGitErrorMessage);
+            gitProcess.Exited += (sender, _) => HandleGitCommandErrors(sender, logger, onGitErrorMessage);
 
             if (args.Contains("difftool", StringComparison.OrdinalIgnoreCase))
                 return string.Empty;
@@ -72,14 +72,12 @@ namespace GitTimelapseView.Core.Common
             var blob = (Blob)treeEntry.Target;
             var lines = new List<string>();
 
-            using (var contentStream = blob.GetContentStream())
-            using (var reader = new StreamReader(contentStream, Encoding.UTF8))
+            using var contentStream = blob.GetContentStream();
+            using var reader = new StreamReader(contentStream, Encoding.UTF8);
+            string? line;
+            while ((line = reader.ReadLine()) != null)
             {
-                string? line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    lines.Add(line);
-                }
+                lines.Add(line);
             }
 
             return lines;

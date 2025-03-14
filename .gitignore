@@ -32,3 +32,5 @@ _ReSharper*/
 packages/
 publish/
 GitTimelapseView/Properties/launchSettings.json
+
+.idea/

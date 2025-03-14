@@ -29,31 +29,3 @@
         @ChildContent
     </ChildContent>
 </Popover>
-
-@code {
-    [Parameter]
-    public UserInfo UserInfo { get; set; } = default!;
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter]
-    public Placement Placement { get; set; } = Placement.Top;
-
-    public string Title
-    {
-        get
-        {
-            if (!string.IsNullOrEmpty(UserInfo.DisplayName))
-            {
-                return UserInfo.DisplayName;
-            }
-			else if (!string.IsNullOrEmpty(UserInfo.AccountName))
-			{
-                return UserInfo.AccountName;
-			}
-
-            return UserInfo.Email;
-        }
-	}
-}

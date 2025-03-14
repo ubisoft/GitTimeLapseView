@@ -67,9 +67,9 @@ namespace GitTimelapseView
             }
         }
 
-        public string[] StartupArguments { get; private set; } = Array.Empty<string>();
+        public string[] StartupArguments { get; private set; } = [];
 
-        public StartupOptions StartupOptions { get; private set; } = new StartupOptions();
+        public StartupOptions StartupOptions { get; private set; } = new();
 
         public string ApplicationDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ApplicationName);
 
@@ -110,7 +110,8 @@ namespace GitTimelapseView
         {
             serviceCollection
                 .AddBlazorWebView()
-                .AddAntDesign();
+                .AddAntDesign()
+                .AddWpfBlazorWebView();
             Logger.LogInformation("Blazor initialized");
         }
 

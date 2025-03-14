@@ -21,7 +21,11 @@ namespace GitTimelapseView.Wpf.Helpers
             if (action.Children.Any())
             {
                 var content = new StackPanel { Orientation = Orientation.Horizontal };
-                content.Children.Add(GetIcon(action.Icon));
+                if (GetIcon(action.Icon) is { } icon)
+                {
+                    content.Children.Add(icon);
+                }
+
                 content.Children.Add(new PackIcon { Kind = PackIconKind.MenuDown });
                 button.Content = content;
 
@@ -32,12 +36,12 @@ namespace GitTimelapseView.Wpf.Helpers
                 }
 
                 button.ContextMenu = contextMenu;
-                button.Click += (sender, args) => button.OpenContextMenu();
+                button.Click += (_, _) => button.OpenContextMenu();
             }
             else
             {
                 button.Content = GetIcon(action.Icon);
-                button.Click += async (sender, args) => await action.ExecuteAsync().ConfigureAwait(false);
+                button.Click += async (_, _) => await action.ExecuteAsync().ConfigureAwait(false);
             }
 
             return button;
@@ -52,7 +56,7 @@ namespace GitTimelapseView.Wpf.Helpers
                 Icon = GetIcon(action.Icon),
                 InputGestureText = action.InputGestureText,
             };
-            menuItem.Click += async (sender, args) => await action.ExecuteAsync().ConfigureAwait(false);
+            menuItem.Click += async (_, _) => await action.ExecuteAsync().ConfigureAwait(false);
             foreach (var child in action.Children)
             {
                 menuItem.Items.Add(child.ToMenuItem());
@@ -61,7 +65,7 @@ namespace GitTimelapseView.Wpf.Helpers
             return menuItem;
         }
 
-        public static UIElement? GetIcon(object? icon)
+        private static UIElement? GetIcon(object? icon)
         {
             if (icon is string str)
             {
@@ -69,10 +73,8 @@ namespace GitTimelapseView.Wpf.Helpers
                 {
                     return new PackIcon { Kind = packIconKind };
                 }
-                else
-                {
-                    return new Image { Source = new BitmapImage(new Uri(str)), Width = 20, Height = 20 };
-                }
+
+                return new Image { Source = new BitmapImage(new Uri(str)), Width = 20, Height = 20 };
             }
 
             return null;

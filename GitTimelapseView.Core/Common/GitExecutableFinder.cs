@@ -73,7 +73,7 @@ namespace GitTimelapseView.Common
 
         private static string? FindGitExeInPathVariable()
         {
-            var usualPaths = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(';') ?? Array.Empty<string>();
+            var usualPaths = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(';') ?? [];
 
             foreach (var path in usualPaths)
             {
@@ -134,25 +134,21 @@ namespace GitTimelapseView.Common
 
         private static string? FindGitInstallPathInRegistry(RegistryKey root, string keyName)
         {
-            using (var uninstall = root.OpenSubKey(keyName, writable: false))
+            using var uninstall = root.OpenSubKey(keyName, writable: false);
+            if (uninstall == null)
+                return null;
+
+            foreach (var subKeyName in uninstall.GetSubKeyNames())
             {
-                if (uninstall == null)
-                    return null;
+                using var softwareKey = uninstall.OpenSubKey(subKeyName);
+                if (softwareKey == null)
+                    continue;
 
-                foreach (var subKeyName in uninstall.GetSubKeyNames())
-                {
-                    using (var softwareKey = uninstall.OpenSubKey(subKeyName))
-                    {
-                        if (softwareKey == null)
-                            continue;
+                if (softwareKey.GetValue("DisplayName") is not string displayName || !displayName.StartsWith("Git version ", StringComparison.OrdinalIgnoreCase))
+                    continue;
 
-                        if (softwareKey.GetValue("DisplayName") is not string displayName || !displayName.StartsWith("Git version ", StringComparison.OrdinalIgnoreCase))
-                            continue;
-
-                        if (softwareKey.GetValue("InstallLocation") is string installLocation && File.Exists($@"{installLocation}\cmd\git.exe"))
-                            return installLocation;
-                    }
-                }
+                if (softwareKey.GetValue("InstallLocation") is string installLocation && File.Exists($@"{installLocation}\cmd\git.exe"))
+                    return installLocation;
             }
 
             return null;

@@ -22,7 +22,7 @@ namespace GitTimelapseView.Actions
             if (application == null)
                 return Task.CompletedTask;
 
-            var messagingService = application.ServiceProvider.GetService<MessagingService>();
+            var messagingService = App.Current.ServiceProvider.GetService<MessagingService>();
             if (messagingService != null)
             {
                 messagingService.ShowInformationDialog($"Version: {application.ApplicationVersion}");

@@ -8,12 +8,12 @@ namespace GitTimelapseView.Services
 {
     public class ThemingService : ServiceBase
     {
-        private readonly ThemeInfo _lightTheme = new ThemeInfo("Light")
+        private readonly ThemeInfo _lightTheme = new("Light")
         {
             MonacoTheme = "vs",
         };
 
-        private readonly ThemeInfo _darkTheme = new ThemeInfo("Dark")
+        private readonly ThemeInfo _darkTheme = new("Dark")
         {
             IsDark = true,
             MonacoTheme = "vs-dark",
@@ -22,11 +22,11 @@ namespace GitTimelapseView.Services
         public ThemingService(ILoggerFactory loggerFactory)
             : base(loggerFactory)
         {
-            Themes = new ThemeInfo[]
-            {
+            Themes =
+            [
                 _lightTheme,
-                _darkTheme,
-            };
+                _darkTheme
+            ];
             var themeProperty = Properties.Settings.Default.Theme;
             var theme = !string.IsNullOrEmpty(themeProperty)
                 ? Themes.FirstOrDefault(x => x.Name.Equals(themeProperty, StringComparison.OrdinalIgnoreCase)) ?? Themes[0]
@@ -49,14 +49,22 @@ namespace GitTimelapseView.Services
                 Properties.Settings.Default.Save();
             }
 
-            if (reloadWindow && App.Current?.MainWindow is MainWindow mainWindow)
+            if (reloadWindow && App.Current.MainWindow is MainWindow mainWindow)
             {
                 mainWindow.Reload();
             }
 
             var paletteHelper = new PaletteHelper();
             var theme = paletteHelper.GetTheme();
-            theme.SetBaseTheme(themeInfo.IsDark ? MaterialDesignThemes.Wpf.Theme.Dark : MaterialDesignThemes.Wpf.Theme.Light);
+            if (themeInfo.IsDark)
+            {
+                theme.SetDarkTheme();
+            }
+            else
+            {
+                theme.SetLightTheme();
+            }
+
             paletteHelper.SetTheme(theme);
         }
     }

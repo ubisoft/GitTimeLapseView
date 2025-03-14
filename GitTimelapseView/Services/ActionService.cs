@@ -13,7 +13,7 @@ namespace GitTimelapseView.Services
         private readonly ILogger _logger;
         private readonly TelemetryService _telemetryService;
         private readonly PageProgressService _pageProgressService;
-        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
         private ActionContext? _currentAction;
 
         public ActionService(ILoggerFactory loggerFactory, TelemetryService telemetryService, MessagingService messagingService, PageProgressService pageProgressService)
@@ -43,7 +43,7 @@ namespace GitTimelapseView.Services
             await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
             var stopwatch = Stopwatch.StartNew();
             var context = new ActionContext(_loggerFactory, action);
-            context.ObservePropertyChanged(nameof(IActionContext.ProgressFeedback), (e, args) => _pageProgressService.IsProgressVisible = context.ProgressFeedback == VisualFeedback.ProgressBarTop);
+            context.ObservePropertyChanged(nameof(IActionContext.ProgressFeedback), (_, _) => _pageProgressService.IsProgressVisible = context.ProgressFeedback == VisualFeedback.ProgressBarTop);
             context.State = ActionState.Running;
             CurrentAction = context;
             ActionStarted?.Invoke(this, context);

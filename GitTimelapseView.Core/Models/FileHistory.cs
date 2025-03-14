@@ -12,7 +12,7 @@ namespace GitTimelapseView.Core.Models
 {
     public class FileHistory
     {
-        private readonly List<FileRevision> _revisions = new();
+        private readonly List<FileRevision> _revisions = [];
         private readonly ConcurrentDictionary<string, FileRevision> _revisionPerCommits = new();
 
         public FileHistory(string filePath)
@@ -49,20 +49,18 @@ namespace GitTimelapseView.Core.Models
                 return;
 
             var commitIds = GetFileCommitIDs(logger).Reverse().ToArray();
-            using (var repository = new Repository(GitRootPath))
+            using var repository = new Repository(GitRootPath);
+            var remoteUrl = repository.FindRemoteUrl();
+
+            var relativeFilePath = repository.MakeRelativeFilePath(FilePath);
+            if (relativeFilePath == null)
+                throw new Exception($"Unable to blame '{FilePath}'. Path is not located in the repository working directory.");
+
+            for (var index = 0; index < commitIds.Length; index++)
             {
-                var remoteUrl = repository.FindRemoteUrl();
-
-                var relativeFilePath = repository.MakeRelativeFilePath(FilePath);
-                if (relativeFilePath == null)
-                    throw new Exception($"Unable to blame '{FilePath}'. Path is not located in the repository working directory.");
-
-                for (var index = 0; index < commitIds.Length; index++)
-                {
-                    var commitId = commitIds[index];
-                    var commit = repository.Lookup<LibGit2Sharp.Commit>(commitId.Commit);
-                    _revisions.Add(new FileRevision(index, new Commit(commit, this, remoteUrl), commitId.FilePath, this));
-                }
+                var commitId = commitIds[index];
+                var commit = repository.Lookup<LibGit2Sharp.Commit>(commitId.Commit);
+                _revisions.Add(new FileRevision(index, new Commit(commit, this, remoteUrl), commitId.FilePath, this));
             }
         }
 
@@ -81,15 +79,13 @@ namespace GitTimelapseView.Core.Models
             revision = Revisions.FirstOrDefault(rev => rev.Commit.IsEqualOrMergeOf(commit));
             if (revision == null)
             {
-                using (var repository = new Repository(GitRootPath))
+                using var repository = new Repository(GitRootPath);
+                revision = Revisions.MinBy(x => repository.Commits.QueryBy(new CommitFilter
                 {
-                    revision = Revisions.MinBy(x => repository.Commits.QueryBy(new CommitFilter
-                    {
-                        IncludeReachableFrom = commit.Id,
-                        ExcludeReachableFrom = x.Commit.Id,
-                        FirstParentOnly = true,
-                    }).Count());
-                }
+                    IncludeReachableFrom = commit.Id,
+                    ExcludeReachableFrom = x.Commit.Id,
+                    FirstParentOnly = true,
+                }).Count());
             }
 
             if (revision != null)
@@ -102,14 +98,14 @@ namespace GitTimelapseView.Core.Models
 
         private IReadOnlyList<FileCommitId> GetFileCommitIDs(ILogger logger)
         {
-            List<FileCommitId> commitIDs = new();
+            List<FileCommitId> commitIDs = [];
             var isFirstTime = true;
 
             var filePath = FilePath;
             do
             {
                 var args = $"rev-list HEAD -- \"{filePath}\"";
-                var result = GitHelpers.RunGitCommand(GitRootPath, args, logger).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var result = GitHelpers.RunGitCommand(GitRootPath, args, logger).Split(['\n'], StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 if (result.Count == 0)
                     return commitIDs;

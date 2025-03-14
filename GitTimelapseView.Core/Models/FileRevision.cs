@@ -28,7 +28,7 @@ namespace GitTimelapseView.Core.Models
         public IList<BlameBlock> Blocks { get; } = new List<BlameBlock>();
 
         /// <summary>
-        /// FileName at the time of the commit.
+        /// Gets fileName at the time of the commit.
         /// </summary>
         private string CommitIdFileName { get; }
 
@@ -37,21 +37,19 @@ namespace GitTimelapseView.Core.Models
             if (Blocks.Any())
                 return;
 
-            using (var repository = new Repository(FileHistory.GitRootPath))
+            using var repository = new Repository(FileHistory.GitRootPath);
+            var remoteUrl = repository.FindRemoteUrl();
+
+            var relativeFilePath = repository.MakeRelativeFilePath(CommitIdFileName);
+            if (relativeFilePath == null)
+                throw new Exception($"Unable to blame '{CommitIdFileName}'. Path is not located in the repository working directory.");
+
+            var blocks = repository.Blame(relativeFilePath, new BlameOptions { StartingAt = Commit.Id });
+            var lines = repository.GetCommitFileLines(relativeFilePath, Commit.Id);
+
+            foreach (var block in blocks)
             {
-                var remoteUrl = repository.FindRemoteUrl();
-
-                var relativeFilePath = repository.MakeRelativeFilePath(CommitIdFileName);
-                if (relativeFilePath == null)
-                    throw new Exception($"Unable to blame '{CommitIdFileName}'. Path is not located in the repository working directory.");
-
-                var blocks = repository.Blame(relativeFilePath, new BlameOptions { StartingAt = Commit.Id });
-                var lines = repository.GetCommitFileLines(relativeFilePath, Commit.Id);
-
-                foreach (var block in blocks)
-                {
-                    Blocks.Add(new BlameBlock(block, this, lines, remoteUrl));
-                }
+                Blocks.Add(new BlameBlock(block, this, lines, remoteUrl));
             }
         }
 
