@@ -9,7 +9,7 @@ namespace GitTimelapseView.Core.Models
 {
     public class Commit
     {
-        private readonly List<FileChange> _fileChanges = new();
+        private readonly List<FileChange> _fileChanges = [];
 
         public Commit(LibGit2Sharp.Commit commit, FileHistory fileHistory, string? remoteUrl)
         {
@@ -60,7 +60,7 @@ namespace GitTimelapseView.Core.Models
                 if (commit == null)
                     return;
 
-                var parents = commit?.Parents.ToArray() ?? Array.Empty<LibGit2Sharp.Commit>();
+                var parents = commit?.Parents.ToArray() ?? [];
                 var changes = repository.Diff.Compare<TreeChanges>(parents.FirstOrDefault()?.Tree, commit?.Tree);
                 foreach (var change in changes)
                 {

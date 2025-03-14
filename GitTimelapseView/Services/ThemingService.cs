@@ -22,11 +22,11 @@ namespace GitTimelapseView.Services
         public ThemingService(ILoggerFactory loggerFactory)
             : base(loggerFactory)
         {
-            Themes = new ThemeInfo[]
-            {
+            Themes =
+            [
                 _lightTheme,
-                _darkTheme,
-            };
+                _darkTheme
+            ];
             var themeProperty = Properties.Settings.Default.Theme;
             var theme = !string.IsNullOrEmpty(themeProperty)
                 ? Themes.FirstOrDefault(x => x.Name.Equals(themeProperty, StringComparison.OrdinalIgnoreCase)) ?? Themes[0]
@@ -49,7 +49,7 @@ namespace GitTimelapseView.Services
                 Properties.Settings.Default.Save();
             }
 
-            if (reloadWindow && App.Current?.MainWindow is MainWindow mainWindow)
+            if (reloadWindow && App.Current.MainWindow is MainWindow mainWindow)
             {
                 mainWindow.Reload();
             }

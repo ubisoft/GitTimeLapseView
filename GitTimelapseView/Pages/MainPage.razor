@@ -51,8 +51,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        ActionService.ActionStarted += (e, args) => OnActionStarted(args);
-        ActionService.ActionCompleted += (e, args) => OnActionCompleted(args);
+        ActionService.ActionStarted += (_, args) => OnActionStarted(args);
+        ActionService.ActionCompleted += (_, args) => OnActionCompleted(args);
         MessagingService.MessageService = MessageService;
         if (ActionService.CurrentAction != null)
 		{
@@ -64,7 +64,7 @@ else
 	private void OnActionStarted(IActionContext actionContext)
 	{
 		_actionContext = actionContext;
-		((BindableBase)actionContext).ObservePropertyChanged(nameof(IActionContext.ProgressFeedback), (e, args) => UpdateProgressFeedback());
+		((BindableBase)actionContext).ObservePropertyChanged(nameof(IActionContext.ProgressFeedback), (_, _) => UpdateProgressFeedback());
 		UpdateProgressFeedback();
 	}
 

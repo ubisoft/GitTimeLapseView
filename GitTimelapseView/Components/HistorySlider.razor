@@ -83,8 +83,8 @@
 
     protected override Task OnInitializedAsync()
     {
-        TimelapseService.CurrentFileRevisionIndexChanging += async (e, args) => await RefreshAsync();
-        Application.Current.MainWindow.SizeChanged += async (e, args) => await RefreshAsync();
+        TimelapseService.CurrentFileRevisionIndexChanging += async (_, _) => await RefreshAsync();
+        Application.Current.MainWindow.SizeChanged += async (_, _) => await RefreshAsync();
         return base.OnInitializedAsync();
     }
 

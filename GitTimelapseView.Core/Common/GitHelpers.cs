@@ -40,7 +40,7 @@ namespace GitTimelapseView.Core.Common
                 throw new InvalidOperationException("Cannot start git.exe");
 
             gitProcess.EnableRaisingEvents = true;
-            gitProcess.Exited += (sender, e) => HandleGitCommandErrors(sender, logger, onGitErrorMessage);
+            gitProcess.Exited += (sender, _) => HandleGitCommandErrors(sender, logger, onGitErrorMessage);
 
             if (args.Contains("difftool", StringComparison.OrdinalIgnoreCase))
                 return string.Empty;

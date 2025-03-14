@@ -43,7 +43,7 @@ namespace GitTimelapseView.Services
             await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
             var stopwatch = Stopwatch.StartNew();
             var context = new ActionContext(_loggerFactory, action);
-            context.ObservePropertyChanged(nameof(IActionContext.ProgressFeedback), (e, args) => _pageProgressService.IsProgressVisible = context.ProgressFeedback == VisualFeedback.ProgressBarTop);
+            context.ObservePropertyChanged(nameof(IActionContext.ProgressFeedback), (_, _) => _pageProgressService.IsProgressVisible = context.ProgressFeedback == VisualFeedback.ProgressBarTop);
             context.State = ActionState.Running;
             CurrentAction = context;
             ActionStarted?.Invoke(this, context);

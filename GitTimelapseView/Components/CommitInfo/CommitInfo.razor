@@ -71,7 +71,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        TimelapseService.CurrentCommitChanged += async (e, args) => await UpdateAsync().ConfigureAwait(false);
+        TimelapseService.CurrentCommitChanged += async (_, _) => await UpdateAsync().ConfigureAwait(false);
         await UpdateAsync().ConfigureAwait(false);
         await base.OnInitializedAsync();
     }

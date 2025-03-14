@@ -12,7 +12,7 @@ namespace GitTimelapseView.Core.Models
 {
     public class FileHistory
     {
-        private readonly List<FileRevision> _revisions = new();
+        private readonly List<FileRevision> _revisions = [];
         private readonly ConcurrentDictionary<string, FileRevision> _revisionPerCommits = new();
 
         public FileHistory(string filePath)
@@ -98,14 +98,14 @@ namespace GitTimelapseView.Core.Models
 
         private IReadOnlyList<FileCommitId> GetFileCommitIDs(ILogger logger)
         {
-            List<FileCommitId> commitIDs = new();
+            List<FileCommitId> commitIDs = [];
             var isFirstTime = true;
 
             var filePath = FilePath;
             do
             {
                 var args = $"rev-list HEAD -- \"{filePath}\"";
-                var result = GitHelpers.RunGitCommand(GitRootPath, args, logger).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var result = GitHelpers.RunGitCommand(GitRootPath, args, logger).Split(['\n'], StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 if (result.Count == 0)
                     return commitIDs;

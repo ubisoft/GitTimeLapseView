@@ -36,12 +36,12 @@ namespace GitTimelapseView.Wpf.Helpers
                 }
 
                 button.ContextMenu = contextMenu;
-                button.Click += (sender, args) => button.OpenContextMenu();
+                button.Click += (_, _) => button.OpenContextMenu();
             }
             else
             {
                 button.Content = GetIcon(action.Icon);
-                button.Click += async (sender, args) => await action.ExecuteAsync().ConfigureAwait(false);
+                button.Click += async (_, _) => await action.ExecuteAsync().ConfigureAwait(false);
             }
 
             return button;
@@ -56,7 +56,7 @@ namespace GitTimelapseView.Wpf.Helpers
                 Icon = GetIcon(action.Icon),
                 InputGestureText = action.InputGestureText,
             };
-            menuItem.Click += async (sender, args) => await action.ExecuteAsync().ConfigureAwait(false);
+            menuItem.Click += async (_, _) => await action.ExecuteAsync().ConfigureAwait(false);
             foreach (var child in action.Children)
             {
                 menuItem.Items.Add(child.ToMenuItem());

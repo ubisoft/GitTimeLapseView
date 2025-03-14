@@ -67,7 +67,7 @@ namespace GitTimelapseView
             }
         }
 
-        public string[] StartupArguments { get; private set; } = Array.Empty<string>();
+        public string[] StartupArguments { get; private set; } = [];
 
         public StartupOptions StartupOptions { get; private set; } = new();
 

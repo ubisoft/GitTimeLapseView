@@ -73,7 +73,7 @@ namespace GitTimelapseView.Common
 
         private static string? FindGitExeInPathVariable()
         {
-            var usualPaths = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(';') ?? Array.Empty<string>();
+            var usualPaths = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(';') ?? [];
 
             foreach (var path in usualPaths)
             {

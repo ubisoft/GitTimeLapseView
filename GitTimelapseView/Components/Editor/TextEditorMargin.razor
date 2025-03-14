@@ -37,7 +37,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        TimelapseService.CurrentFileRevisionIndexChanged += async (e, args) => await InvokeAsync(() => StateHasChanged());
+        TimelapseService.CurrentFileRevisionIndexChanged += async (_, _) => await InvokeAsync(() => StateHasChanged());
         return base.OnInitializedAsync();
     }
 
