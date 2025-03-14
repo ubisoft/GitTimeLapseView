@@ -17,34 +17,11 @@
 				            <AvatarExt Email=@block.InitialSignature.Email PopupPlacement="@Placement.Right"></AvatarExt>
                         </span>
                     }
-                    
-                    
+
+
                 </div>
 		    </div>
 	    }
     }
-	
+
 </div>
-
-@code {
-    public const int RowHeight = 19;
-
-    [Parameter]
-    public string CssClass {get; set;} = "";
-
-    [Inject]
-    TimelapseService TimelapseService { get; set; } = default!;
-
-    protected override Task OnInitializedAsync()
-    {
-        TimelapseService.CurrentFileRevisionIndexChanged += async (_, _) => await InvokeAsync(() => StateHasChanged());
-        return base.OnInitializedAsync();
-    }
-
-    public async Task OnBlockClicked(BlameBlock block)
-    {
-        await new SelectCommitAction(block.InitialCommit).ExecuteAsync();
-    }
-
-	private string getBlockStyle(BlameBlock block) => $"height:{RowHeight * block.LineCount}px;max-height:{RowHeight * block.LineCount}px;margin:0px;";
-}

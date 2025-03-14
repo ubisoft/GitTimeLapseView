@@ -24,10 +24,17 @@ public partial class RevisionList
 
     private Dictionary<string, object> OnRow(RowData<FileRevisionTableRow> row)
     {
-        Action<MouseEventArgs> OnClick = async _ => await new SelectCommitAction(row.Data.Revision.Commit).ExecuteAsync();
-        Action<MouseEventArgs> OnDoubleClick = async _ => await new ChangeCurrentRevisionAction(row.Data.Index).ExecuteAsync();
+        void OnClick(MouseEventArgs args)
+        {
+            _ = new SelectCommitAction(row.Data.Revision.Commit).ExecuteAsync().ConfigureAwait(false);
+        }
 
-        return new Dictionary<string, object> { { "ondoubleclick", OnDoubleClick }, { "onclick", OnClick }, };
+        void OnDoubleClick(MouseEventArgs args)
+        {
+            _ = new ChangeCurrentRevisionAction(row.Data.Index).ExecuteAsync().ConfigureAwait(false);
+        }
+
+        return new Dictionary<string, object> { { "ondoubleclick", (Action<MouseEventArgs>)OnDoubleClick }, { "onclick", (Action<MouseEventArgs>)OnClick }, };
     }
 
     public Task RefreshAsync()

@@ -16,24 +16,3 @@
         @ChildContent
     </ChildContent>
 </Popover>
-
-@code {
-    [Inject]
-    public TimelapseService? TimelapseService { get; set; } = default!;
-
-    [Parameter]
-    public FileRevision Revision { get; set; } = default!;
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter]
-    public Placement Placement { get; set; } = Placement.Top;
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-    }
-
-    private string Title => $"Revision {Revision.Label}";
-}

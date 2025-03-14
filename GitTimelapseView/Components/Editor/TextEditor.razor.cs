@@ -55,7 +55,16 @@ public partial class TextEditor
         {
             try
             {
-                _model = await Global.CreateModel(JsRuntime, newValue);
+                var language = "plaintext";
+                if (TimelapseService.FilePath is { } filePath)
+                {
+                    var extension = System.IO.Path.GetExtension(filePath).ToLowerInvariant();
+                    if (FileExtensions.ExtensionsToLanguage.TryGetValue(extension, out var l))
+                    {
+                        language = l;
+                    }
+                }
+                _model = await Global.CreateModel(JsRuntime, newValue, language: language);
                 await _editor.SetModel(_model);
                 if (TimelapseService.InitialLineNumber != null)
                 {
