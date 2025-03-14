@@ -15,7 +15,7 @@ namespace GitTimelapseView.Tests
         public void TimelapseHistory_ForThisSourceFile_ContainsAtLeastTwoCommits()
         {
             var sourceDirectoryPath = Path.GetDirectoryName(GetThisSourceFilePath());
-            Assert.IsNotNull(sourceDirectoryPath);
+            Assert.That(sourceDirectoryPath, Is.Not.Null);
             if (sourceDirectoryPath == null)
             {
                 return;
@@ -25,8 +25,9 @@ namespace GitTimelapseView.Tests
             var history = new FileHistory(readmePath);
             history.Initialize(NullLogger.Instance);
 
-            Assert.NotNull(history);
-            Assert.GreaterOrEqual(history.Revisions.Count, 1);
+            Assert.That(history, Is.Not.Null);
+            Assert.That(history.Revisions.Count, Is.Not.Null);
+            Assert.That(history.Revisions.Count, Is.GreaterThanOrEqualTo(1));
         }
 
         private static string? GetThisSourceFilePath([CallerFilePath] string? srcFilePath = null) => srcFilePath;

@@ -9,14 +9,14 @@
 }
 else
 {
-    <Card Size="small" class="commit-details" Style="height: 100%">
+    <Card Size="CardSize.Small" class="commit-details" Style="height: 100%">
 	    <TitleTemplate>
 		    <div class="card-title">
 			    <span title=@_commit.Id>
 				    Commit #@_commit.ShortId
 			    </span>
                 <Tooltip Title=@CopyToClipboardTooltip>
-                    <Button Type="@ButtonType.Text" @onclick="OnButtonClicked" Size="@ButtonSize.Small">
+                    <Button Type="@ButtonType.Text" OnClick="OnButtonClicked" Size="@ButtonSize.Small">
                         <i class="mdi mdi-clipboard-multiple-outline" />
                     </Button>
                 </Tooltip>
@@ -42,7 +42,7 @@ else
                     </Tooltip>
                 }
         </Extra>
-        <CardTabs>
+        <ChildContent>
 	        <Tabs @bind-ActiveKey="@TimelapseService.CommitInfoSelectedTab" Animated Size="@TabSize.Small" >
 			    <TabPane Tab="Message" Key="message">
                     <div class="commit-message">
@@ -53,7 +53,7 @@ else
 					<FileChanges Changes="@_commit.FileChanges" CommitId="@_commit.Id"></FileChanges>
 			    </TabPane >
 		    </Tabs>
-        </CardTabs>
+        </ChildContent>
     </Card>
 }
 

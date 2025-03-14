@@ -9,7 +9,7 @@
     PageSize=@PageSize
     RowClassName="@(x => x.Data.RowClass)"
     HidePagination=@_hidePagination>
-    <Column @bind-Field="@context.ChangeKind" Width="70" Title="Change" Align="ColumnAlign.Center">
+    <PropertyColumn Property="c => c.ChangeKind" Width="70" Title="Change" Align="ColumnAlign.Center">
         @if(@context.ChangeKind == ChangeKind.Modified)
 		{
 			<i class="mdi mdi-pencil-box change-icon" style="color: #C48C45;" title="Modified"></i>
@@ -26,10 +26,10 @@
 		{
 			<i class="mdi mdi-alpha-c-box change-icon" style="color: red;" title="Conflict"></i>
 		}
-    </Column>
-    <Column @bind-Field="@context.Path" Title="Path" Width="520" Ellipsis Sortable Filterable>
+    </PropertyColumn>
+    <PropertyColumn Property="c => c.Path" Title="Path" Width="520" Ellipsis Sortable Filterable>
         <Button Type="@ButtonType.Link" OnClick="()=>OnPathClicked(context)" Size="@ButtonSize.Small">@context.Path</Button>
-    </Column>
+    </PropertyColumn>
     <ActionColumn Width="60">
         <div class="actions">
             <Tooltip Title="@DiffTooltip">

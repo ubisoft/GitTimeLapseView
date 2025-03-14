@@ -110,7 +110,8 @@ namespace GitTimelapseView
         {
             serviceCollection
                 .AddBlazorWebView()
-                .AddAntDesign();
+                .AddAntDesign()
+                .AddWpfBlazorWebView();
             Logger.LogInformation("Blazor initialized");
         }
 

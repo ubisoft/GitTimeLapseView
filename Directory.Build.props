@@ -8,8 +8,8 @@
       <Version>0.0.0</Version>
 
       <!-- Compile Options -->
-      <LangVersion>10.0</LangVersion>
-      <TargetFramework>net8.0-windows</TargetFramework>
+      <LangVersion>12</LangVersion>
+      <TargetFramework>net9.0-windows</TargetFramework>
       <Deterministic>true</Deterministic>
       <Features>strict</Features>
       <TreatWarningsAsErrors>True</TreatWarningsAsErrors>

@@ -2,7 +2,7 @@
 @using AntDesign.TableModels
 @using static GitTimelapseView.RazorApp
 
-<Card Size="small">
+<Card Size="CardSize.Small">
 	<TitleTemplate>
 		<div class="card-title" style="font-weight: bolder;">
 			Git Revision List
@@ -19,17 +19,17 @@
             Style="margin-bottom: 10px;"
             RowClassName="@(x => x.Data.RowClass)"
             OnRow=@OnRow>
-            <Column Title="Rev" @bind-Field="context.Index" Sortable Width="55" Align="ColumnAlign.Center">
+            <PropertyColumn Title="Rev" Property="c => c.Index" Sortable Width="55" Align="ColumnAlign.Center">
                 <RevisionTooltip Revision=@context.Revision Placement="@Placement.Right">
                     <b>@context.Revision.Label</b>
                 </RevisionTooltip>
-            </Column>
-            <Column Title="Author" @bind-Field="context.AuthorEmail" Sortable Width="75" Align="ColumnAlign.Center">
+            </PropertyColumn>
+            <PropertyColumn Title="Author" Property="c => c.AuthorEmail" Sortable Width="75" Align="ColumnAlign.Center">
                  <AvatarExt Email=@context.AuthorEmail PopupPlacement="@Placement.Right"></AvatarExt>
-            </Column>
-            <Column Title="Message" @bind-Field="context.Message" Ellipsis Filterable></Column>
-            <Column Title="Date" @bind-Field="context.AuthorDate" Filterable Width="130"></Column>
-            <Column Title="Sha1" @bind-Field="context.ShortId" Filterable Width="60" Align="ColumnAlign.Center"></Column>
+            </PropertyColumn>
+            <PropertyColumn Title="Message" Property="c => c.Message" Ellipsis Filterable></PropertyColumn>
+            <PropertyColumn Title="Date"  Property="c => c.AuthorDate" Filterable Width="130"></PropertyColumn>
+            <PropertyColumn Title="Sha1"  Property="c => c.ShortId" Filterable Width="60" Align="ColumnAlign.Center"></PropertyColumn>
             <ActionColumn Width="90">
                 <div class="actions">
                     <Tooltip Title="@RevisionTooltip">

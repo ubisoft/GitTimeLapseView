@@ -1,11 +1,12 @@
-﻿@namespace GitTimelapseView
+﻿@using BlazorMonaco.Editor
+@namespace GitTimelapseView
 
 <div class="text-editor-grid">
     <div class="margin-box">
         <TextEditorMargin CssClass="editor-custommargin"></TextEditorMargin>
     </div>
     <div class="editor-box">
-        <MonacoEditor @ref="_editor" CssClass="editor" Id="MonacoEditor" ConstructionOptions="EditorConstructionOptions"
+        <StandaloneCodeEditor @ref="_editor" CssClass="editor" Id="MonacoEditor" ConstructionOptions="EditorConstructionOptions"
 			OnDidInit="EditorOnDidInit"
 			OnMouseDown="EditorOnMouseDown"
 			OnDidScrollChange="EditorOnDidScroll"  />
@@ -41,7 +42,7 @@
 </style>
 
 @code {
-    private MonacoEditor? _editor;
+    private CodeEditor? _editor;
     private TextModel? _model;
     private string _previousValue = string.Empty;
     private List<string> _currentDecorations = new();
@@ -58,14 +59,14 @@
 
     protected override Task OnInitializedAsync()
     {
-        TimelapseService.CurrentFileRevisionIndexChanged += async (e, args) => 
+        TimelapseService.CurrentFileRevisionIndexChanged += async (e, args) =>
         {
             if (args.Reason == FileRevisionIndexChangeReason.Explicit)
             {
                 await UpdateModelAsync();
             }
         };
-        TimelapseService.CurrentCommitChanged += async (e, args) => 
+        TimelapseService.CurrentCommitChanged += async (e, args) =>
         {
             if (args.Reason == CommitChangeReason.Explicit)
             {
@@ -89,7 +90,8 @@
         {
             try
             {
-                _model = await MonacoEditor.CreateModel(newValue, null, null);
+
+                _model = await Global.CreateModel(JSRuntime, newValue, null, null);
                 await _editor.SetModel(_model);
                 if (TimelapseService.InitialLineNumber != null)
                 {
@@ -109,10 +111,10 @@
         await UpdateDecorationsAsync(_model).ConfigureAwait(false);
     }
 
-    private StandaloneEditorConstructionOptions EditorConstructionOptions(MonacoEditor editor)
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(Editor editor)
     {
         return new StandaloneEditorConstructionOptions
-	    {	
+	    {
 		    AutomaticLayout = true,
             GlyphMargin = true,
 			ReadOnly = true,
@@ -121,7 +123,7 @@
 	    };
     }
 
-    private async Task EditorOnDidInit(MonacoEditorBase editor)
+    private async Task EditorOnDidInit()
     {
         _didInit = true;
         await UpdateModelAsync();
@@ -146,7 +148,7 @@
         if (block != null)
         {
             await new SelectCommitAction(block.InitialCommit).ExecuteAsync();
-        }	
+        }
     }
 
     private async Task UpdateDecorationsAsync(TextModel? model = null)

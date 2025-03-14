@@ -130,7 +130,8 @@ namespace GitTimelapseView.Services
 
             public ActionState State { get; set; } = ActionState.Unknown;
 
-            public IDisposable BeginScope<TState>(TState state)
+            public IDisposable? BeginScope<TState>(TState state)
+                where TState : notnull
             {
                 return _logger.BeginScope(state);
             }

@@ -135,7 +135,7 @@ namespace GitTimelapseView.Services
                 CurrentCommitChanged?.Invoke(this, new CommitChangedEventArgs(commit, reason));
             }
             catch (Exception e)
-{
+            {
                 logger.LogError(e, $"Unable to set current commit to {commit.Id}");
             }
         }

@@ -23,12 +23,12 @@ namespace GitTimelapseView.Services
 
         internal void Success(string message)
         {
-            MessageService?.Success(message);
+            _ = MessageService?.Success(message);
         }
 
         internal void Error(string message)
         {
-            MessageService?.Error(message);
+            _ = MessageService?.Error(message);
         }
     }
 }

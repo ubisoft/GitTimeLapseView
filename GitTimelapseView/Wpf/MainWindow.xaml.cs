@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using GitTimelapseView.Actions;
 using GitTimelapseView.Extensions;
 using GitTimelapseView.Helpers;
@@ -142,7 +141,7 @@ namespace GitTimelapseView
 
         private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            new OpenFileAction().ExecuteAsync().ConfigureAwait(false);
+            _ = new OpenFileAction().ExecuteAsync().ConfigureAwait(false);
         }
 
         private void CloseButton_Executed(object sender, ExecutedRoutedEventArgs e) => ExitApplication();

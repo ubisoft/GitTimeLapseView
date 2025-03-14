@@ -56,7 +56,15 @@ namespace GitTimelapseView.Services
 
             var paletteHelper = new PaletteHelper();
             var theme = paletteHelper.GetTheme();
-            theme.SetBaseTheme(themeInfo.IsDark ? MaterialDesignThemes.Wpf.Theme.Dark : MaterialDesignThemes.Wpf.Theme.Light);
+            if (themeInfo.IsDark)
+            {
+                theme.SetDarkTheme();
+            }
+            else
+            {
+                theme.SetLightTheme();
+            }
+
             paletteHelper.SetTheme(theme);
         }
     }
