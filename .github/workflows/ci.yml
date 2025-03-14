@@ -50,7 +50,7 @@ jobs:
           release_name="GitTimelapseView-$tag-${{ matrix.target }}"
 
           # Build everything
-          dotnet publish GitTimelapseView/GitTimelapseView.csproj --framework net6.0-windows --runtime "${{ matrix.target }}" -c Release -o "$release_name" --self-contained
+          dotnet publish GitTimelapseView/GitTimelapseView.csproj --framework net9.0-windows --runtime "${{ matrix.target }}" -c Release -o "$release_name" --self-contained
 
           # Pack files
           if [ "${{ matrix.target }}" == "win-x64" ]; then
