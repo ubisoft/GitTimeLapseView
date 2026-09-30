@@ -34,9 +34,7 @@ namespace GitTimelapseView.Actions
             context.LogInformation($"Diffing '{path}' with commit '{_commitId}'");
 
             var errorMessage = $"Could not launch difftool on {path} for commit {_commitId}";
-            var args = path.Equals(oldPath, StringComparison.OrdinalIgnoreCase)
-                ? $"difftool -y {_commitId}^ {_commitId} -- \"{path}\""
-                : $"difftool -y {_commitId}^ {_commitId} -- \"{oldPath}\" \"{path}\"";
+            var args = GitHelpers.BuildDiffToolArguments(_commitId, oldPath, path);
             GitHelpers.RunGitCommand(_fileChange.Commit.FileHistory.GitRootPath, args, context, errorMessage);
 
             return Task.CompletedTask;

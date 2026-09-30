@@ -48,6 +48,19 @@ namespace GitTimelapseView.Core.Common
             return gitProcess.StandardOutput.ReadToEnd().Trim();
         }
 
+        /// <summary>
+        /// Builds the argument string for `git difftool` between a commit and its parent for one or two paths.
+        /// Paths are quoted and preceded by `--` so that a crafted file/folder name (e.g. containing
+        /// "--extcmd=..." or another option-like token) is always treated by git as a literal path, never
+        /// as a command-line option.
+        /// </summary>
+        public static string BuildDiffToolArguments(string commitId, string oldPath, string path)
+        {
+            return oldPath.Equals(path, StringComparison.OrdinalIgnoreCase)
+                ? $"difftool -y {commitId}^ {commitId} -- \"{path}\""
+                : $"difftool -y {commitId}^ {commitId} -- \"{oldPath}\" \"{path}\"";
+        }
+
         public static string? GetRemotePlatform(string remoteUrl)
         {
             if (remoteUrl.Contains("github.com", StringComparison.OrdinalIgnoreCase))
