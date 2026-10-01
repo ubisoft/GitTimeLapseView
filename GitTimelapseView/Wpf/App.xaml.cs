@@ -181,6 +181,31 @@ namespace GitTimelapseView
             }
         }
 
+        // Resolve a possibly-relative, possibly-wrong-case path to its absolute, on-disk canonical form.
+        // git rev-list pathspec is case-sensitive even on Windows, so wrong-case input yields zero history.
+        private static string CanonicalizePath(string input)
+        {
+            try
+            {
+                var full = Path.GetFullPath(input);
+                if (!File.Exists(full)) return full;
+                var root = Path.GetPathRoot(full) ?? string.Empty;
+                var current = root;
+                foreach (var part in full.Substring(root.Length).Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
+                {
+                    if (string.IsNullOrEmpty(part)) continue;
+                    var match = Directory.EnumerateFileSystemEntries(current, part).FirstOrDefault();
+                    if (match == null) return full;
+                    current = match;
+                }
+                return current;
+            }
+            catch
+            {
+                return input;
+            }
+        }
+
         private async Task OnApplicationStartup(object sender, StartupEventArgs startupArguments)
         {
             StartupArguments = startupArguments.Args;
@@ -190,6 +215,11 @@ namespace GitTimelapseView
             if (StartupArguments != null && StartupArguments.Length == 1 && File.Exists(StartupArguments[0]) && string.IsNullOrEmpty(StartupOptions.InputFile))
             {
                 StartupOptions.InputFile = StartupArguments[0];
+            }
+
+            if (!string.IsNullOrEmpty(StartupOptions.InputFile))
+            {
+                StartupOptions.InputFile = CanonicalizePath(StartupOptions.InputFile);
             }
 
             ConfigureServices();
